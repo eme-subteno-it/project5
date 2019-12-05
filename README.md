@@ -1,5 +1,5 @@
-# Documentation
-
+Documentation
+==================
 ## Introduction
 
 Ce programme intéragit avec l'API Open Food Facts afin de permettre aux utilisateurs de récupérer un aliment afin de le comparer à la base de données de l'API et ainsi proposer à l'utilisateur, un substitut plus sain à l'aliment qui lui fait envie. Ce programme est créé avec le langage de programmation Python et utilise la base de données MySQL. 
@@ -7,12 +7,27 @@ Cette base de données permettra à l'utilisateur de posséder un compte et ains
 
 ## Installation
 
-Work in progress...
+_Utiliser SSH_ :
+
+    git clone git@github.com:eme-subteno-it/project5.git
+
+_Ou utiliser HTTPS_ :
+
+    git clone https://github.com/eme-subteno-it/project5.git
+
+_Pour l'ouvrir_ :
+
+    python3 main.py
 
 ## Création d'un compte
 
-Work in progress...
+Images... \
+Taper 1 afin de créer un compte.\
+Remplissez le formulaire.\
+Appuyer sur "Entrée"\
+Il ne vous reste plus qu'à vous connecter.\
 
+------------------------------------------------------------------------
 
 ## Configuration des clés d'API
 1. Installation
