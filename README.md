@@ -19,37 +19,31 @@ _Pour l'ouvrir_ :
 
     python3 main.py
 
-## Création d'un compte
-
-Images... \
-Taper 1 afin de créer un compte.\
-Remplissez le formulaire.\
-Appuyer sur "Entrée"\
-Il ne vous reste plus qu'à vous connecter.\
-
-------------------------------------------------------------------------
-
-## Configuration des clés d'API
-1. Installation
-2. Configuration de base
-
 ## Utilisation du programme
 
-### 1. Création d'un compte ou connexion
-* Créer son compte \
-bla bla bla
+* Création d'un compte \
+    Images... \
+    Taper 1 afin de créer un compte.\
+    Remplissez le formulaire.\
+    Appuyer sur "Entrée"\
+    Il ne vous reste plus qu'à vous connecter.\
 
-* Se connecter\
-blablabla
+* Connexion
 
-### 2. Choisir un aliment
-bla bla bla
+* Choisir un aliment
 
-### 3. Visualiser les aliments sauvegardés
-bla bla bla
+* Visualiser vos aliments sauvegardés
 
-### 4. Déconnexion
-La déconnexion s'effectuera lorsque vous quitterez le programme. 
+* Déconnexion \
+    La déconnexion s'effectuera lorsque vous quitterez le programme.
+
+Développement
+=================
+## Configuration clé API (Open Food Facts)
+1. Installation\
+    https://world.openfoodfacts.org/api/v0/product/[code-barre].json
+
+2. Configuration de base
 
 
 <!-- 
