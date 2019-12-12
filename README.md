@@ -26,7 +26,7 @@ _Pour l'ouvrir_ :
     Taper 1 afin de créer un compte.\
     Remplissez le formulaire.\
     Appuyer sur "Entrée"\
-    Il ne vous reste plus qu'à vous connecter.\
+    Il ne vous reste plus qu'à vous connecter.
 
 * Connexion
 
