@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS Users (
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(16) NOT NULL,
     email VARCHAR(45) NOT NULL,
-    password VARCHAR(45) NOT NULL,
+    pass VARCHAR(255) NOT NULL,
+    id_substitute INT,
     PRIMARY KEY (id)
 )
 ENGINE=InnoDB;

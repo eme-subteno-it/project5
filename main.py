@@ -1,26 +1,22 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Connexion as co
 from models import Database as db
 from models import RequestSQL as sq
+from models import Program as pr
+
 import mysql.connector
 
 def main():
-    # new_user = db.Database()
-    db.Database.db_connect()
-    db.Database.create_database()
-    print(db.Database.cursor)
+    Program = pr.Program()
+    loop = Program.loop
+    screen = Program.screen
 
-    connexion = co.Connexion()
-    
-    connexion.action()
-    connexion.save_it()
-    connexion.connect()
 
-    sql = sq.RequestSQL()
-    sql.save_user()
-    sql.view_user()
-    
+    while loop:
+        start = pr.Program()
+
+    while screen:
+        poursuit = Program.poursuit()
 
 if __name__ == '__main__':
     main()

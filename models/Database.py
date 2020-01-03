@@ -1,60 +1,54 @@
 #! /usr/bin/env python
 # coding: utf-8
+from common import constants as const
 import mysql.connector
 from mysql.connector import errorcode
 
 class Database:
 
-    user = 'root'
-    password = 'coffee61'
-    host = 'localhost'
-    dbname = 'db_OFF'
+    user = const.ROOT
+    password = const.PASSWORD
+    host = const.HOST
+    dbname = const.DB_NAME
     cursor = ''
-    connexion = ''
+    connection = ''
     state_db = False
 
     @classmethod
-    def db_connect(cls):
-        
-        cls.connexion = mysql.connector.connect(
+    def first_connect(cls):
+        cls.connection = mysql.connector.connect(
             user=cls.user,
             password=cls.password,
             host=cls.host,
-            database=cls.dbname,
             raise_on_warnings=True,
         )
-        cls.cursor = cls.connexion.cursor()
-
+        cls.cursor = cls.connection.cursor()
         cls.state_db = True
         if cls.state_db == False:
             print('Please, install mysql on your local server.')
             exit()
 
     @classmethod
+    def connect_user(cls):
+        cls.connection = mysql.connector.connect(
+            user=cls.user,
+            password=cls.password,
+            host=cls.host,
+            database=cls.dbname,
+            raise_on_warnings=True,
+        )
+        cls.cursor = cls.connection.cursor()
+
+    @classmethod
     def create_database(cls):
+        cls.first_connect()
         try:
-            print(cls.cursor)
-            with open("data/db_OFF.sql", 'r') as sql_file:
-                sqltext = sql_file.read()
-                sql_inst = sqltext.split(';')
-
-                for sql in sql_inst:
-                    line = sql + ';'
-                    cls.cursor.execute(line)
-
+            sql = open("data/db_OFF.sql").read()
+            cls.cursor.execute(sql)
+            print("--------------------------")
             print("The database is installed.")
+            print("--------------------------")
         except mysql.connector.Error as err:
             print(err)
 
-    # def __init__(self):
-    #     config = {
-    #         'user': user,
-    #         'password': password,
-    #         'host': host,
-    #         'bdname': dbname
-    #     }
-    # @classmethod
-    # def __del__(cls):
-    #     cls.cursor.close()
-    #     cls.connexion.close()
     

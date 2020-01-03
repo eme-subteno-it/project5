@@ -1,33 +1,43 @@
 #! /usr/bin/env python
 # coding: utf-8
 from models import Database as db
-from models import Connexion as co
+from models import User as user
 import mysql.connector
 from mysql.connector import errorcode
 
 
-connexion = co.Connexion()
 class RequestSQL:
 
     def __init__(self):
-        db.Database.db_connect()
-        self.connect_db = db.Database.connexion
+        db.Database.connect_user()
+        self.connect_db = db.Database.connection
         self.cursor = db.Database.cursor
-        self.response = connexion.info_user
-        self.save_user()
-    
+        self.users = ''
 
-    def save_user(self):
-        for response in self.response:
-            request = 'INSERT INTO Users (username, email, password) VALUES (:username, :email, :password)'
-            self.cursor.execute(request, response)
-            print(self.cursor(raw))
-        self.connect_db.commit()
-        self.connect_db.close()
-    
-    def view_user(self):
-        request = 'SELECT * FROM Users'
-        self.cursor.execute(request)
-        coucou = self.cursor.fetchone()
-        print(coucou)
-        self.connect_db.close()
+    def save_user(self, response):
+        res_email = response['email']
+        request = "SELECT * FROM Users WHERE email = '%s'" 
+        self.cursor.execute(request % res_email)
+        result = self.cursor.fetchall()
+        if len(result) > 0:
+            print("L'adresse email existe déjà.")
+        else:
+            request_done = 'INSERT INTO Users (username, email, pass) VALUES (%(username)s, %(email)s, %(password)s)'
+            self.cursor.execute(request_done, response)
+            self.connect_db.commit()
+            print("--------------------------")
+            print("Vous êtes bien enregistré en base de données.")
+            print("--------------------------")
+
+    def connect_user(self, response):
+        res_email = response['email']
+        res_pass = response['password']
+        request = "SELECT * FROM Users WHERE email = '%s' AND pass = '%s'"
+        self.cursor.execute(request % (res_email, res_pass))
+        result = self.cursor.fetchall()
+        if len(result) == 0:
+            print('Cette adresse email ou ce mot de passe ne correspondent pas, veuillez rééssayer.')
+        else:
+            print("--------------------------")
+            print('Vous êtes connectés.')
+            print("--------------------------")

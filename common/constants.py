@@ -3,4 +3,8 @@
 
 """ Program's constants """
 
-DB_NAME = 'db_openFF'
+
+ROOT = 'root'
+PASSWORD = 'coffee61'
+HOST = 'localhost'
+DB_NAME = 'db_OFF'
