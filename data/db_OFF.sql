@@ -4,15 +4,13 @@ SET NAMES UTF8MB4;
 -- Database db_OFF
 -- ------------------------------------------------
 
+CREATE USER IF NOT EXISTS accountdb@localhost
+IDENTIFIED BY 'passfordb';
+
 CREATE DATABASE IF NOT EXISTS db_OFF;
 USE db_OFF;
 
--- ------------------------------------------------
--- User Database
--- ------------------------------------------------
-
-CREATE USER [IF NOT EXISTS] accountdboff
-IDENTIFIED BY 'pass_db_off';
+GRANT ALL PRIVILEGES ON db_OFF.* TO 'accountdb'@'localhost';
 
 -- ------------------------------------------------
 -- Table db_OFF.Category
@@ -26,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Category (
 ENGINE=InnoDB;
 
 -- ------------------------------------------------
--- Table db_OFF.Users
+-- Table db_OFF.User
 -- ------------------------------------------------
 CREATE TABLE IF NOT EXISTS User (
     id INT NOT NULL AUTO_INCREMENT,
@@ -87,7 +85,7 @@ CREATE TABLE IF NOT EXISTS User_substitute (
     id_substitute INT NOT NULL,
     CONSTRAINT fk_user_id
         FOREIGN KEY (id_user)
-        REFERENCES Users(id),
+        REFERENCES User(id),
     CONSTRAINT fk_substitute_id
         FOREIGN KEY (id_substitute)
         REFERENCES Substitute(id)

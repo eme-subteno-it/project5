@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
+from colorama import init, Fore
+init(autoreset=True)
 from common import constants as const
 import mysql.connector
 from mysql.connector import errorcode
@@ -32,15 +34,17 @@ class Database:
     def connect_user(cls):
         try:
             cls.connection = mysql.connector.connect(
-                user=accountdboff,
-                password='pass_db_off',
+                user='accountdb',
+                password='passfordb',
                 host=const.HOST,
                 database=const.DB_NAME,
                 raise_on_warnings=True,
             )
             cls.cursor = cls.connection.cursor()
         except mysql.connector.Error as err:
-            print(err)
+            print('--------------------------------------------------------------------------------')
+            print(Fore.RED + str(err))
+            print('--------------------------------------------------------------------------------')
             exit()
 
     @classmethod
@@ -50,9 +54,11 @@ class Database:
             sql = open("data/db_OFF.sql").read()
             cls.cursor.execute(sql)
             print("--------------------------")
-            print("The database is installed.")
+            print(Fore.GREEN + "The database is installed.")
             print("--------------------------")
         except mysql.connector.Error as err:
-            print(err)
+            print('--------------------------------------------------------------------------------')
+            print(Fore.RED + str(err))
+            print('--------------------------------------------------------------------------------')
 
     

@@ -17,7 +17,7 @@ class RequestSQL:
 
     def save_user(self, response):
         res_email = response['email']
-        request = "SELECT * FROM Users WHERE email = '%s'"
+        request = "SELECT * FROM User WHERE email = '%s'"
         self.cursor.execute(request % res_email)
         result = self.cursor.fetchall()
         if len(result) > 0:
@@ -25,7 +25,7 @@ class RequestSQL:
             print(Fore.RED + "L'adresse email existe déjà.")
             print('----------------------------')
         else:
-            request_done = 'INSERT INTO Users (username, email, pass) VALUES (%(username)s, %(email)s, %(password)s)'
+            request_done = 'INSERT INTO User (username, email, pass) VALUES (%(username)s, %(email)s, %(password)s)'
             self.cursor.execute(request_done, response)
             self.connection.commit()
             print("---------------------------------------------")
@@ -37,7 +37,7 @@ class RequestSQL:
     def connect_user(self, response):
         res_email = response['email']
         res_pass = response['password']
-        request = "SELECT * FROM Users WHERE email = '%s' AND pass = '%s'"
+        request = "SELECT * FROM User WHERE email = '%s' AND pass = '%s'"
         self.cursor.execute(request % (res_email, res_pass))
         result = self.cursor.fetchall()
         if len(result) == 0:

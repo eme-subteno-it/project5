@@ -32,6 +32,9 @@ class Program:
             if cls.choice == 1:
                 const.ROOT = input('Entrez votre identifiant MySQL : ')
                 const.PASSWORD = input('Entrez votre mot de passe MySQL : ')
+                import pdb; pdb.set_trace()
+                # Database.first_connect()
+                # Database.create_user()
                 Database.create_database()
                 Database.connect_user()
                 User.save_user_in_database()
