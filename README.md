@@ -2,7 +2,7 @@ Documentation
 ==================
 ## Introduction
 
-Ce programme intéragit avec l'API Open Food Facts afin de permettre aux utilisateurs de récupérer un aliment afin de le comparer à la base de données de l'API et ainsi proposer à l'utilisateur, un substitut plus sain à l'aliment qui lui fait envie. Ce programme est créé avec le langage de programmation Python et utilise la base de données MySQL. 
+Ce programme intéragit avec l'API Open Food Facts afin de permettre aux utilisateurs de récupérer un aliment et le comparer à la base de données de l'API et ainsi proposer à l'utilisateur, un substitut plus sain à l'aliment qui lui fait envie. Ce programme est créé avec le langage de programmation Python et utilise la base de données MySQL. 
 Cette base de données permettra à l'utilisateur de posséder un compte et ainsi retrouver les aliments substitués qu'il aura lui-même enregistré. 
 
 ## Installation
@@ -21,14 +21,20 @@ _Pour l'ouvrir_ :
 
 ## Utilisation du programme
 
-* Création d'un compte \
-    Images... \
-    Taper 1 afin de créer un compte.\
-    Remplissez le formulaire.\
-    Appuyer sur "Entrée"\
-    Il ne vous reste plus qu'à vous connecter.
+* Assurez-vous d'avoir MySql d'installer en local.
+
+* Connexion à MySQL
+    * Insérer votre identifiant MySQL
+    * Insérer votre mot de passe MySQL
+
+* Création d'un compte 
+    * Taper 1 afin de créer un compte.
+    * Remplissez le formulaire.
+    * Appuyez sur "Entrée"
 
 * Connexion
+    * Remplissez le formulaire
+    * Appuyez sur "Entrée"
 
 * Choisir un aliment
 
@@ -44,6 +50,7 @@ Développement
     https://world.openfoodfacts.org/api/v0/product/[code-barre].json
 
 2. Configuration de base
+
 
 
 <!-- 

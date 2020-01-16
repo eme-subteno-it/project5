@@ -3,8 +3,8 @@
 
 """ Program's constants """
 
-
-ROOT = 'root'
-PASSWORD = 'coffee61'
 HOST = 'localhost'
 DB_NAME = 'db_OFF'
+
+ROOT = ''
+PASSWORD = ''

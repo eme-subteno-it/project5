@@ -6,38 +6,42 @@ from mysql.connector import errorcode
 
 class Database:
 
-    user = const.ROOT
-    password = const.PASSWORD
-    host = const.HOST
-    dbname = const.DB_NAME
     cursor = ''
     connection = ''
     state_db = False
 
     @classmethod
     def first_connect(cls):
-        cls.connection = mysql.connector.connect(
-            user=cls.user,
-            password=cls.password,
-            host=cls.host,
-            raise_on_warnings=True,
-        )
-        cls.cursor = cls.connection.cursor()
-        cls.state_db = True
-        if cls.state_db == False:
-            print('Please, install mysql on your local server.')
+        try:
+            cls.connection = mysql.connector.connect(
+                user=const.ROOT,
+                password=const.PASSWORD,
+                host=const.HOST,
+                raise_on_warnings=True,
+            )
+            cls.cursor = cls.connection.cursor()
+            cls.state_db = True
+            if cls.state_db == False:
+                print('Please, install mysql on your local server.')
+                exit()
+        except mysql.connector.Error as err:
+            print(err)
             exit()
 
     @classmethod
     def connect_user(cls):
-        cls.connection = mysql.connector.connect(
-            user=cls.user,
-            password=cls.password,
-            host=cls.host,
-            database=cls.dbname,
-            raise_on_warnings=True,
-        )
-        cls.cursor = cls.connection.cursor()
+        try:
+            cls.connection = mysql.connector.connect(
+                user=accountdboff,
+                password='pass_db_off',
+                host=const.HOST,
+                database=const.DB_NAME,
+                raise_on_warnings=True,
+            )
+            cls.cursor = cls.connection.cursor()
+        except mysql.connector.Error as err:
+            print(err)
+            exit()
 
     @classmethod
     def create_database(cls):

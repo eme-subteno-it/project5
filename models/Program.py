@@ -1,63 +1,78 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Database as db
-from models import User as user
-from models import RequestSQL as req
+from models.Database import *
+from models.User import *
 from models import HTTPrequest as http
-import re
-import crypt
-import mysql.connector
-from mysql.connector import errorcode
-from hmac import compare_digest as compare_hash
+from models import RequestSQL as req
+from common import constants as const
 
 
 class Program:
 
-    def __init__(self):
-        self.loop = 1
-        self.screen = 0
-        self.choice = 0
-        self.user = user.User()
-        # self.http = http.HTTPrequest()
-        self.start()
+    root = ''
+    password = ''
+    loop = 1
+    second_loop = 0
+    third_loop = 0
+    choice = 0
+    http = http.HTTPrequest()
 
-    def start(self):
+    @classmethod
+    def start(cls):
         """ Begin the program : To call MySQL connector to connect user """
+
+        while cls.loop:
+            action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
+            print('------------------------')
+            for act in action:
+                print(act)
+            print('------------------------')
+            cls.choice = int(input('Tapez 1, 2 ou 3 : '))
+
+            if cls.choice == 1:
+                const.ROOT = input('Entrez votre identifiant MySQL : ')
+                const.PASSWORD = input('Entrez votre mot de passe MySQL : ')
+                Database.create_database()
+                Database.connect_user()
+                User.save_user_in_database()
+
+            elif cls.choice == 2:
+                Database.connect_user()
+                User.check_the_user()
+            else:
+                cls.loop = 0
         
-        action = ["1 - S'enregistrer", "2 - Se connecter"]
+        while cls.second_loop:
+            cls.poursuit()
+
+        while cls.third_loop:
+            cls.view_category()
+
+    @classmethod
+    def poursuit(cls):
+        action = 'Souhaitez-vous mettre à jour la liste des catégories ?'
+        print(action)
+        
+        cls.choice = int(input('1 - Oui || 2 - Non : '))
+        if cls.choice == 1:
+            sql = req.RequestSQL()
+            sql.check_category_table()
+        elif cls.choice == 2:
+            cls.second_loop = 0
+            cls.third_loop = 1
+    
+    @classmethod
+    def view_category(cls):
+        action = ["1 - Quel aliment souhaitez-vous substituer ?", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
+        print('--------------------------------------------')
         for act in action:
             print(act)
-        
-        self.choice = int(input('1 ou 2 : '))
+        print('--------------------------------------------')
+        cls.choice = int(input('Tapez 1, 2 ou 3 : '))
+        if cls.choice == 1:
+            cls.http.get_data()
+            cls.choice = int(input('Sélectionnez un aliment : '))
 
-        if self.choice == 1:
-            db.Database.create_database()
-            db.Database.connect_user()
-            self.user.save_user_in_database()
-            self.loop = 0
-            self.screen = 1
-        elif self.choice == 2:
-            db.Database.connect_user()
-            self.user.check_the_user()
-            self.loop = 0
-            self.screen = 1
-        else:
-            self.loop = 0
-
-    def poursuit(self):
-        action = ["1 - Quel aliment souhaitez-vous substituer ?", "2 - Voir mes aliments substitués."]
-        for act in action:
-            print(act)
-
-        self.choice = int(input('1 ou 2 : '))
-
-        if self.choice == 1:
-            action = input('Sélectionnez la catégorie : ')
-            # Affiche plusieurs propositions associées à un chiffre.
-            # self.http.get_data()
-            # L'utilisateur entre le chiffre correspondant et valide
-
-            # action = input('Sélectionner l'aliment : )
             # Affiche plusieurs propositions associées à un chiffre.
             # L'utilisateur entre le chiffre correspondant et valide.
 
@@ -65,7 +80,7 @@ class Program:
 
             # L'utilisateur peut enregistrer le résultat en base s'il le souhaite
         
-        if self.choice == 2:
+        if cls.choice == 2:
             pass
             # Afficher une liste d'aliment correspondant à un numéro. (son id ?)
             # L'utilisateur pourra alors choisir son aliment et voir les informations

@@ -2,6 +2,7 @@
 # coding: utf-8
 from  urllib import request
 import json
+from models import RequestSQL as req
 
 
 class HTTPrequest:
@@ -13,9 +14,10 @@ class HTTPrequest:
         res = request.urlopen(self.url).read()
         result = res.decode('utf8')
         result_parse = json.loads(result)
-        print('Téléchargement des catégories.')
 
-        for cat in range(1, 20):
-            category_name = result_parse['tags']
-            print(category_name)
-
+        category_name = []
+        for cat in range(20):
+            result_name = result_parse['tags'][cat]['name']
+            category_name.append(result_name)
+        sql = req.RequestSQL()
+        sql.select_category(category_name)
