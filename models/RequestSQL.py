@@ -56,9 +56,9 @@ class RequestSQL:
         self.cursor.execute(request)
         result = self.cursor.fetchall()
         if len(result) == 0:
-            print('-------------------------------------------------------------------')
-            print(Fore.RED + 'Aucune catégorie à mettre à jour, veuillez poursuivre le programme.')
-            print('-------------------------------------------------------------------')
+            print('--------------------------------------------------------------------')
+            print(Fore.RED + 'Aucune catégorie présente en base, veuillez poursuivre le programme.')
+            print('--------------------------------------------------------------------')
             pr.Program.second_loop = 0
             pr.Program.third_loop = 1
         else:
@@ -66,7 +66,7 @@ class RequestSQL:
             self.cursor.execute(delete)
             self.connection.commit()
             api = http.HTTPrequest()
-            api.get_data()
+            api.get_categories()
             pr.Program.second_loop = 0
             pr.Program.third_loop = 1
 
@@ -79,8 +79,11 @@ class RequestSQL:
             for res in response:
                 request_done = "INSERT INTO Category (category_name) VALUES (%s)"
                 self.cursor.execute(request_done, (res,))
-                print("Inserted : ",self.cursor.rowcount,"row(s) of data.")
-            
+                nb += 1
+                if nb <= 9:
+                    print('0' + str(nb), '-', res)
+                else:
+                    print(nb, '-', res)
             self.connection.commit()
             print("-------------------------------------------")
             print(Fore.GREEN + "Catégories enregistrées en base de données.")

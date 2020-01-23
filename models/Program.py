@@ -9,8 +9,6 @@ from common import constants as const
 
 class Program:
 
-    root = ''
-    password = ''
     loop = 1
     second_loop = 0
     third_loop = 0
@@ -32,9 +30,6 @@ class Program:
             if cls.choice == 1:
                 const.ROOT = input('Entrez votre identifiant MySQL : ')
                 const.PASSWORD = input('Entrez votre mot de passe MySQL : ')
-                import pdb; pdb.set_trace()
-                # Database.first_connect()
-                # Database.create_user()
                 Database.create_database()
                 Database.connect_user()
                 User.save_user_in_database()
@@ -66,16 +61,22 @@ class Program:
     
     @classmethod
     def view_category(cls):
-        action = ["1 - Quel aliment souhaitez-vous substituer ?", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
+        action = ["1 - Substituer un aliment.", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
+        
         print('--------------------------------------------')
         for act in action:
             print(act)
         print('--------------------------------------------')
+
+        product_choice = 0
         cls.choice = int(input('Tapez 1, 2 ou 3 : '))
         if cls.choice == 1:
-            cls.http.get_data()
-            cls.choice = int(input('Sélectionnez un aliment : '))
-
+            print('Choisir une catégorie : ')
+            cls.http.get_categories()
+            cls.choice_category = int(input('Numéro de la catégorie : '))
+            cls.http.get_products(cls.choice_category)
+            cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))
+            
             # Affiche plusieurs propositions associées à un chiffre.
             # L'utilisateur entre le chiffre correspondant et valide.
 
@@ -83,7 +84,7 @@ class Program:
 
             # L'utilisateur peut enregistrer le résultat en base s'il le souhaite
         
-        if cls.choice == 2:
-            pass
+        # if cls.choice == 2:
+        #     cls.http.get_products()
             # Afficher une liste d'aliment correspondant à un numéro. (son id ?)
             # L'utilisateur pourra alors choisir son aliment et voir les informations
