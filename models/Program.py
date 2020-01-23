@@ -66,17 +66,17 @@ class Program:
         print('--------------------------------------------')
         for act in action:
             print(act)
-        print('--------------------------------------------')
 
         product_choice = 0
         cls.choice = int(input('Tapez 1, 2 ou 3 : '))
+        print('--------------------------------------------')
         if cls.choice == 1:
             print('Choisir une catégorie : ')
             cls.http.get_categories()
             cls.choice_category = int(input('Numéro de la catégorie : '))
             cls.http.get_products(cls.choice_category)
             cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))
-            
+
             # Affiche plusieurs propositions associées à un chiffre.
             # L'utilisateur entre le chiffre correspondant et valide.
 

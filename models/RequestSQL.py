@@ -71,7 +71,7 @@ class RequestSQL:
             pr.Program.third_loop = 1
 
     def select_category(self, response):
-        request = "SELECT category_name FROM Category GROUP BY id"
+        request = "SELECT category_name FROM Category"
         self.cursor.execute(request)
         result = self.cursor.fetchall()
         nb = 0
@@ -95,3 +95,31 @@ class RequestSQL:
                 print('0' + str(nb), '-', res[0])
             else:
                 print(nb, '-', res[0])
+    
+    def select_product(self, response):
+        request = "SELECT product_name FROM Product"
+        self.cursor.execute(request % response)
+        result = self.cursor.fetchall()
+        nb = 0
+        if len(result) > 0:
+            for res in response:
+                request_done = "INSERT INTO Product (product_name) VALUES (%s)"
+                self.cursor.execute(request_done, (res,))
+                nb += 1
+                print(nb, '-', res)
+            self.connection.commit()
+
+        for res in result:
+            nb += 1
+            print(nb, '-', res[0])
+
+    def insert_category_product(self, response):
+        print(response)
+        pass
+        # request = "INSERT INTO Category_product (id_category, id_product) \
+        #             VALUES( \
+        #                 (SELECT id FROM Category WHERE category_name = %(category_name)s), \
+        #                 (SELECT id FROM Product WHERE id = (SELECT MAX(id) FROM Product)) \
+        #             )"
+        # self.cursor.execute(request, response)
+        # self.connection.commit()

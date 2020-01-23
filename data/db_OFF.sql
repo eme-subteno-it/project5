@@ -40,7 +40,7 @@ ENGINE=InnoDB;
 -- ------------------------------------------------
 CREATE TABLE IF NOT EXISTS Product (
     id INT NOT NULL AUTO_INCREMENT,
-    product_name VARCHAR(45) NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 )
 ENGINE=InnoDB;
@@ -91,17 +91,3 @@ CREATE TABLE IF NOT EXISTS User_substitute (
         REFERENCES Substitute(id)
 )
 ENGINE=InnoDB;
--- ------------------------------------------------
--- Table db_OFF Index
--- ------------------------------------------------
-ALTER TABLE Category
-ADD INDEX ind_category_name (category_name);
-
-ALTER TABLE Product
-ADD INDEX ind_product_name (product_name);
-
-ALTER TABLE User
-ADD INDEX ind_user_name (username)
-
-ALTER TABLE Substitute
-ADD INDEX ind_substitute_name (substitute_name)
