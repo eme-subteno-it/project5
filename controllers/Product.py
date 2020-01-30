@@ -6,8 +6,12 @@ import mysql.connector
 from mysql.connector import errorcode
 
 
-class Category:
+class Product:
+
+    product_list = []
 
     def __init__(self):
-       pass 
+        self.id = 1
+        self.name = ''
+    
     

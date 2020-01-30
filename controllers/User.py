@@ -2,8 +2,8 @@
 # coding: utf-8
 import re
 import hashlib
-from models import Program as pr
-from models import RequestSQL as req
+from views import Program as pr
+from models import Request as req
 
 
 class User:
@@ -25,7 +25,7 @@ class User:
         else:
             hashed = hashlib.sha256(str(form_subscribe['password']).encode('utf-8')).hexdigest()
             form_subscribe['password'] = hashed
-            sql = req.RequestSQL()
+            sql = req.Request()
             sql.save_user(form_subscribe)
 
     @staticmethod
@@ -36,5 +36,5 @@ class User:
         }
         hashed = hashlib.sha256(str(form_connection['password']).encode('utf-8')).hexdigest()
         form_connection['password'] = hashed
-        sql = req.RequestSQL()
+        sql = req.Request()
         sql.connect_user(form_connection)

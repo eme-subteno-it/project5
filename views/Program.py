@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 # coding: utf-8
 from models.Database import *
-from models.User import *
-from models import HTTPrequest as http
-from models import RequestSQL as req
+from models import APIrequest as http
+from models import Request as req
 from common import constants as const
+from controllers.User import *
+from controllers.Category import *
 
 
 class Program:
@@ -13,7 +14,6 @@ class Program:
     second_loop = 0
     third_loop = 0
     choice = 0
-    http = http.HTTPrequest()
 
     @classmethod
     def start(cls):
@@ -53,8 +53,7 @@ class Program:
         
         cls.choice = int(input('1 - Oui || 2 - Non : '))
         if cls.choice == 1:
-            sql = req.RequestSQL()
-            sql.check_category_table()
+            Category.update()
         elif cls.choice == 2:
             cls.second_loop = 0
             cls.third_loop = 1
@@ -72,7 +71,8 @@ class Program:
         print('--------------------------------------------')
         if cls.choice == 1:
             print('Choisir une catégorie : ')
-            cls.http.get_categories()
+            Category.get()
+            
             cls.choice_category = int(input('Numéro de la catégorie : '))
             cls.http.get_products(cls.choice_category)
             cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Program as pr
+from views import Program as pr
 
 
 def main():
