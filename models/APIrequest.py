@@ -12,7 +12,7 @@ import random
 class APIrequest:
 
     def __init__(self):
-        self.url = 'https://fr.openfoodfacts.org/categories.json'
+        self.url = ''
         self.categories = []
         self.total_products = []
         self.result_parse = False
@@ -23,14 +23,20 @@ class APIrequest:
         self.result_parse = json.loads(result)
 
     def get_categories(self):
-        
+        self.url = 'https://fr.openfoodfacts.org/categories.json'
         self.call_api()
-        nb = 0 # Index for to know what is the product url and comparate with the category choice
+        nb = 0 # Category index for to know what is the product url and comparate with the category choice
+        
         # Management categories for to get a random list 
         response_api = []
+
         for x in range(60):
             result_categories = self.result_parse['tags'][x]['name']
-            response_api.append(result_categories)
+            result_products_urls = self.result_parse['tags'][x]['url'] + '.json'
+
+            one = [result_categories, result_products_urls]
+            response_api.append(one)
+
         for x in range(30):
             values = random.choice(response_api)
 
@@ -40,19 +46,21 @@ class APIrequest:
                 pass
 
         # # Management Product URL
-        # product_category_url = self.result_parse['tags'][cat]['url'] + '.json'
-        # nb += 1
-        # tuple_product = (nb, product_category_url, result_categories)
-        # self.total_products.append(tuple_product)
+        for categorie in self.categories:
+            nb += 1 # Category index
+
+            urls = categorie[1]
+        
+        product_tuple = (nb, urls)
+        self.total_products.append(product_tuple)
 
         # # To send in database
         # categories = cat.Category()
         # categories.insert(self.categories)
  
 
-    # def get_products(self, nb_category):
-    #     products = [] # List for add the products
-
+    def get_products(self, nb_category):
+        products = [] # List for add the products
     #     # To get all url and the category_name
     #     for product in self.total_products:
     #         nb = product[0]

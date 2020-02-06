@@ -21,7 +21,10 @@ class Category:
     def insert(cls):
         res = api.APIrequest()
         res.get_categories()
-        cls.categories_list = res.categories
+
+        for res in res.categories:
+            category_name = res[0]
+            cls.categories_list.append(category_name)
 
         # Add in database
         sql = req.Request()
@@ -39,7 +42,6 @@ class Category:
         sql = req.Request()
         result = sql.get_categories()
 
-        print(cls.categories_list)
         if not(result):
             print('--------------------------------------------------------------------')
             print(Fore.RED + 'Aucune catégorie présente en base, veuillez poursuivre le programme.')
@@ -48,7 +50,10 @@ class Category:
             # Get new Categories in API
             res = api.APIrequest()
             res.get_categories()
-            cls.categories_list = res.categories
+
+            for res in res.categories:
+                category_name = res[0]
+                cls.categories_list.append(category_name)
 
             # Update in database 
             sql.delete_categories()

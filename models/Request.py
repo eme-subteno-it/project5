@@ -59,6 +59,7 @@ class Request:
 # ----------------------------------------------------------------------------
 # ---------------------------- CATEGORIES ------------------------------------
 # ----------------------------------------------------------------------------
+
     def get_categories(self):
         request = "SELECT * FROM Category"
         self.cursor.execute(request)
@@ -74,7 +75,6 @@ class Request:
             Category.insert()
         else:
             for res in result:
-                print(result)
                 pr.Program.second_loop = 0
                 pr.Program.third_loop = 1
 
@@ -94,13 +94,6 @@ class Request:
         self.cursor.execute(request)
         self.connection.commit()
 
-    # def update_categories(self, response):
-    #     for res in response:
-    #         request = "UPDATE Category SET category_name = (%s)"
-    #         self.cursor.execute(request, (res,))
-    #         self.connection.commit()
-
-
 # ----------------------------------------------------------------------------
 # ------------------------------ PRODUCTS ------------------------------------
 # ----------------------------------------------------------------------------
@@ -119,7 +112,7 @@ class Request:
     #             print(nb, '-', res)
     #         self.connection.commit()
     #     else:
-    #         print('Deja en base')
+    #         ('Deja en base')
 
     #     for res in result:
     #         nb += 1

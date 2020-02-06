@@ -20,6 +20,9 @@ class Program:
         """ Begin the program : To call MySQL connector to connect user """
 
         while cls.loop:
+            call = http.APIrequest()
+            call.get_categories()
+
             action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
             print('------------------------')
             for act in action:
@@ -41,13 +44,13 @@ class Program:
                 cls.loop = 0
         
         while cls.second_loop:
-            cls.poursuit()
+            cls.update_categories_or_not()
 
         while cls.third_loop:
-            cls.view_category()
+            cls.view_categories()
 
     @classmethod
-    def poursuit(cls):
+    def update_categories_or_not(cls):
         action = 'Souhaitez-vous mettre à jour la liste des catégories ?'
         print(action)
         
@@ -59,7 +62,7 @@ class Program:
             cls.third_loop = 1
     
     @classmethod
-    def view_category(cls):
+    def view_categories(cls):
         action = ["1 - Substituer un aliment.", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
         
         print('--------------------------------------------')
