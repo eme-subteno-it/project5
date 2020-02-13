@@ -3,6 +3,7 @@
 from colorama import init, Fore
 init(autoreset=True)
 from controllers.Category import *
+from controllers.Product import *
 from views import Program as pr
 from models.Database import *
 from models import APIrequest as http
@@ -67,27 +68,26 @@ class Request:
 
         return result
 
-    def check_category_table(self):
-        request = "SELECT * FROM Category"
-        self.cursor.execute(request)
-        result = self.cursor.fetchall()
-        if len(result) == 0:
-            Category.insert()
-        else:
-            for res in result:
-                pr.Program.second_loop = 0
-                pr.Program.third_loop = 1
+    # def check_category_table(self):
+    #     select_categories = self.get_categories()
+    #     if len(select_categories) == 0:
+    #         Category.insert()
+    #     else:
+    #         for res in select_categories:
+    #             pr.Program.second_loop = 0
+    #             pr.Program.third_loop = 1
 
-            return result
+    #         Category.view()
 
     def set_categories(self, response):
-        nb = 0
         for res in response:
             request_done = "INSERT INTO Category (category_name) VALUES (%s)"
             self.cursor.execute(request_done, (res,))
         self.connection.commit()
         pr.Program.second_loop = 0
         pr.Program.third_loop = 1
+
+        # Category.view()
 
     def delete_categories(self):
         request = "DELETE FROM Category"
@@ -98,6 +98,28 @@ class Request:
 # ------------------------------ PRODUCTS ------------------------------------
 # ----------------------------------------------------------------------------
 
+    def get_products(self):
+        request = "SELECT * FROM Category_product"
+        self.cursor.execute(request)
+        result = self.cursor.fetchall()
+
+        return result
+
+    def check_category_product_table(self):
+        select_products = self.get_products()
+        if len(select_products) == 0:
+            Product.insert()
+        else:
+            for res in select_products:
+                pr.Program.third_loop = 0
+                pr.Program.fourth_loop = 1
+
+            Product.view()
+
+    def set_products(self, response):
+        pass
+        # print(response)
+        
     # def select_product(self, response):
     #     request = "SELECT product_name FROM Product"
     #     self.cursor.execute(request % response)
@@ -118,15 +140,6 @@ class Request:
     #         nb += 1
     #         print(nb, '-', res[0])
 
-    def check_database_product(self, response):
-        request = "SELECT product_name FROM Product"
-        self.cursor.execute(request)
-        result = self.cursor.fetchall()
-
-        if len(result) == 0:
-            self.insert_product(response)
-        else:
-            self.get_product(response)
 
     def insert_product(self, response):
         res_product = response['product_name']
@@ -182,8 +195,16 @@ class Request:
         # self.cursor.execute(request, response)
         # self.connection.commit()
 
+# ----------------------------------------------------------------------------
+# ------------------------ CATEGORY_PRODUCTS ---------------------------------
+# ----------------------------------------------------------------------------
 
+    def get_products(self):
+        request = "SELECT * FROM Category_product"
+        self.cursor.execute(request)
+        result = self.cursor.fetchall()
 
+        return result
 # Lors du choix de la catégorie, il faut afficher les produits liés à celle-ci. 
 # Il faut vérifier que les produits n'existent pas déjà en base (pour éviter les doublons)
 # Sinon, les ajouter pour ne pas avoir à recharger tout le json à chaque fois... 

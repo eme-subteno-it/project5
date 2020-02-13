@@ -1,18 +1,38 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Database as db
-
+from models import Request as req
+from models import APIrequest as api
 
 
 class Product:
 
-    product_list = []
+    products_list = []
+    choice_category = 0
 
-    def get():
-        pass
+    @classmethod
+    def view(cls):
+        sql.req.Request()
+        result = sql.get_products()
+        # Gestion de récupération d'id pour ensuite pouvoir afficher les bons produits. 
 
-    def insert():
-        pass
+    @classmethod
+    def get(cls, choice_category):
+        # We give a value at choice_category
+        cls.choice_category = choice_category
+
+        # Check in database if products exist
+        sql = req.Request()
+        sql.check_category_product_table()
+
+    @classmethod
+    def insert(cls, products):
+        """ Insert Products from API to database """
+
+        cls.products_list.append(products)
+        
+        # Add in database
+        sql = req.Request()
+        sql.set_products(cls.products_list)
 
     def delete():
         pass

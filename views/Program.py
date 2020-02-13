@@ -6,6 +6,7 @@ from models import Request as req
 from common import constants as const
 from controllers.User import *
 from controllers.Category import *
+from controllers.Product import *
 
 
 class Program:
@@ -13,16 +14,16 @@ class Program:
     loop = 1
     second_loop = 0
     third_loop = 0
+    fourth_loop = 0
     choice = 0
+    choice_category = 0
+    api = http.APIrequest()
 
     @classmethod
     def start(cls):
         """ Begin the program : To call MySQL connector to connect user """
 
         while cls.loop:
-            call = http.APIrequest()
-            call.get_categories()
-
             action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
             print('------------------------')
             for act in action:
@@ -47,7 +48,10 @@ class Program:
             cls.update_categories_or_not()
 
         while cls.third_loop:
-            cls.view_categories()
+            cls.choice_categories()
+
+        while cls.fourth_loop:
+            cls.choice_products()
 
     @classmethod
     def update_categories_or_not(cls):
@@ -62,9 +66,9 @@ class Program:
             cls.third_loop = 1
     
     @classmethod
-    def view_categories(cls):
+    def choice_categories(cls):
         action = ["1 - Substituer un aliment.", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
-        
+
         print('--------------------------------------------')
         for act in action:
             print(act)
@@ -75,10 +79,15 @@ class Program:
         if cls.choice == 1:
             print('Choisir une catégorie : ')
             Category.get()
-            
+
             cls.choice_category = int(input('Numéro de la catégorie : '))
-            cls.http.get_products(cls.choice_category)
-            cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))
+            # Product.get(cls.choice_category)
+            
+
+    @classmethod
+    def choice_products(cls):
+        pass
+            # cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))
 
             # Affiche plusieurs propositions associées à un chiffre.
             # L'utilisateur entre le chiffre correspondant et valide.

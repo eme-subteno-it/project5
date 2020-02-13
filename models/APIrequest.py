@@ -4,6 +4,7 @@ from colorama import init, Fore
 init(autoreset=True)
 from  urllib import request
 import json
+from common import constants as const
 from models import Request as req
 from controllers import Category as cat
 import random
@@ -14,79 +15,59 @@ class APIrequest:
     def __init__(self):
         self.url = ''
         self.categories = []
-        self.total_products = []
+        self.url_products = []
         self.result_parse = False
+        self.products = {}
 
     def call_api(self):
         res = request.urlopen(self.url).read()
         result = res.decode('utf8')
         self.result_parse = json.loads(result)
 
-    def get_categories(self):
+    def get_datas(self):
         self.url = 'https://fr.openfoodfacts.org/categories.json'
         self.call_api()
-        nb = 0 # Category index for to know what is the product url and comparate with the category choice
         
-        # Management categories for to get a random list 
+        # Management categories for to get a list 
         response_api = []
-
-        for x in range(60):
+        for x in range(30):
             result_categories = self.result_parse['tags'][x]['name']
             result_products_urls = self.result_parse['tags'][x]['url'] + '.json'
 
-            one = [result_categories, result_products_urls]
-            response_api.append(one)
+            response_api = [result_categories, result_products_urls]
+            self.categories.append(response_api)
 
-        for x in range(30):
-            values = random.choice(response_api)
 
-            if values not in self.categories:
-                self.categories.append(values)
-            else:
-                pass
-
-        # # Management Product URL
-        for categorie in self.categories:
-            nb += 1 # Category index
-
-            urls = categorie[1]
+        # Management Product URL
         
-        product_tuple = (nb, urls)
-        self.total_products.append(product_tuple)
+        total_products = [] # List for add totaly products with her category
+        for categorie in self.categories:
+            category_name = categorie[0]
+            url = categorie[1]
+            self.url = url
+            self.call_api()
 
-        # # To send in database
-        # categories = cat.Category()
-        # categories.insert(self.categories)
- 
+            products = []
 
-    def get_products(self, nb_category):
-        products = [] # List for add the products
-    #     # To get all url and the category_name
-    #     for product in self.total_products:
-    #         nb = product[0]
-    #         product_category_url = product[1]
-    #         category_name = product[2]
-
-    #         # If the choice matches with the url, we read the url
-    #         if nb_category == nb:
-    #             res = request.urlopen(product_category_url).read()
-    #             result = res.decode('utf8')
-    #             result_parse = json.loads(result)
-
-    #             # To get all products and insert the product list
-    #             for key in result_parse['products']: 
-    #                 products.append(key['product_name'])
+            for x in range(10):
                 
-    #             # To send the products and the cateogry name in database
-    #             select_products = {
-    #                 'product_name': products,
-    #                 'category_name': category_name
-    #             }
-    #             product = select_products['product_name']
+                try:
+                    product_name = self.result_parse['products'][x]['product_name']
+                except KeyError:
+                    product_name = ''
+                
+                products.append(product_name)
 
-    #             # Delete the empty products in the product_name list
-    #             while '' in product:
-    #                 del product[product.index('')]
+                self.products = {
+                    'product_name': products,
+                    'category_name': category_name
+                }
 
-    #             sql = req.RequestSQL()
-    #             sql.check_database_product(select_products)
+                verify_product_name = self.products['product_name']
+                while '' in verify_product_name:
+                    del verify_product_name[verify_product_name.index('')]
+
+                total_products.append(self.products)
+
+        print(total_products)
+        print(len(total_products))

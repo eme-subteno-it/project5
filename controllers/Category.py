@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Database as db
 from models import Request as req
 from models import APIrequest as api
+from views.View import *
+from views import Program as pr
 from controllers import User as user
+from controllers.Product import *
 from colorama import init, Fore
 init(autoreset=True)
 
@@ -11,17 +13,38 @@ init(autoreset=True)
 class Category:
 
     categories_list = []
+
+    @classmethod
+    def view(cls):
+        sql = req.Request()
+        result = sql.get_categories()
+
+        for res in result:
+            category_name = res[1]
+            cls.categories_list.append(category_name)
+        
+        View.view_categories(cls.categories_list)
     
     @classmethod
     def get(cls):
+        """ To get the categories in database if exists. Else we insert this """
         sql = req.Request()
-        sql.check_category_table()
+        result = sql.get_categories()
+        if len(result) == 0:
+            cls.insert()
+        else:
+            pr.Program.second_loop = 0
+            pr.Program.third_loop = 1
+            cls.view()
 
     @classmethod
     def insert(cls):
+        """ Get the categories (and products) from API to insert in database """
         res = api.APIrequest()
-        res.get_categories()
+        # res.get_datas()
+        products = res.get_datas()
 
+        # Product.insert(pro)
         for res in res.categories:
             category_name = res[0]
             cls.categories_list.append(category_name)
@@ -29,6 +52,11 @@ class Category:
         # Add in database
         sql = req.Request()
         sql.set_categories(cls.categories_list)
+
+        # Get the product from API to insert in database
+        # Product.insert(products)
+
+        # cls.view()
 
     @classmethod
     def delete(self):
@@ -47,22 +75,9 @@ class Category:
             print(Fore.RED + 'Aucune catégorie présente en base, veuillez poursuivre le programme.')
             print('--------------------------------------------------------------------')
         else:
-            # Get new Categories in API
-            res = api.APIrequest()
-            res.get_categories()
-
-            for res in res.categories:
-                category_name = res[0]
-                cls.categories_list.append(category_name)
-
-            # Update in database 
+            sql = req.Request()
+            # Delete olds Categories in database 
             sql.delete_categories()
-            sql.set_categories(cls.categories_list)
-            # result = sql.set_categories()
 
-            # for res in result:
-            #     nb += 1
-            #     if nb <= 9:
-            #         print('0' + str(nb), '-', res)
-            #     else:
-            #         print(nb, '-', res)
+            # Get new Categories in API
+            cls.insert()
