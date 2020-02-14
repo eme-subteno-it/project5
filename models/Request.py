@@ -7,6 +7,8 @@ from controllers.Product import *
 from views import Program as pr
 from models.Database import *
 from models import APIrequest as http
+import mysql.connector
+from mysql.connector import errorcode
 
 
 class Request:
@@ -116,10 +118,57 @@ class Request:
 
             Product.view()
 
-    def set_products(self, response):
-        pass
-        # print(response)
-        
+    def set_products(self, products_categories, products):
+        select_product = self.get_products()
+        if len(select_product) == 0:
+            for res in products:
+                request = "INSERT INTO Product (product_name) VALUES (%s)"
+                self.cursor.execute(request, (res,))
+                self.connection.commit()
+            self.set_products_categories(products_categories)
+            Category.view()
+        else:
+            print('Il y a déjà du contenu en base')
+
+    def set_products_categories(self, products_categories):
+        """ Add the id's products and categories in reference table """
+
+        for res in products_categories:
+            products = res['product_name']
+            categories = res['category_name']
+
+            for i in products:
+                try:
+                    request_all = "INSERT INTO Category_product (id_category, id_product) \
+                        VALUES ( \
+                            (SELECT id FROM Category WHERE category_name = %s), \
+                            (SELECT id FROM Product WHERE product_name = %s) \
+                        )"
+                    self.cursor.execute(request_all, (categories, i))
+                    self.connection.commit()
+                except mysql.connector.Error as err:
+                    pass
+            # Categories
+            # request_category = "SELECT id FROM Category WHERE category_name = %s"
+            # self.cursor.execute(request_category )
+            # result_category = self.cursor.fetchall()
+
+            # print('Resultat des categories (ID) : ', int(result_category))
+            # Products
+            # for i in products:
+            #     request_product =("""SELECT id FROM Product WHERE product_name = %s""", i)
+            #     self.cursor.execute(request_product)
+            #     result_product = self.cursor.fetchall()
+
+            #     # Categories and products
+            #     for i in result_product:
+            #         print(i)
+            #         print(result_category)
+            #         request_done = "INSERT INTO Category_product (id_category, id_product) VALUES (%s, %s)"
+            #         self.cursor.execute(request_done, (result_category, i[0],))
+
+
+# ----------------------------------------------------------------------------
     # def select_product(self, response):
     #     request = "SELECT product_name FROM Product"
     #     self.cursor.execute(request % response)
@@ -141,25 +190,22 @@ class Request:
     #         print(nb, '-', res[0])
 
 
-    def insert_product(self, response):
-        res_product = response['product_name']
-        res_category = response['category_name']
-
+    # def insert_product(self, response):
         # Insert product
-        for res in res_product:
-            print(res_category, res)
-            request = "INSERT INTO Product (product_name) VALUES (%s)"
-            get_category_id = "SELECT id FROM Category WHERE category_name = '%s'"
-            get_product_id = "SELECT id FROM Product WHERE product_name ='%s'"
-            # Insert ids in the reference table Category_product
-            request_all = "INSERT INTO Category_product (id_category, id_product) \
-                VALUES ( \
-                    (SELECT id FROM Category WHERE category_name = %s), \
-                    (SELECT id FROM Product WHERE product_name = %s) \
-                )"
-            # request_all = "INSERT INTO Category_product(id_category, id_product) \
-            #     VALUES (%s, %s)"
-            print(res_category, res)
+        # for res in res_product:
+        #     print(res_category, res)
+        #     request = "INSERT INTO Product (product_name) VALUES (%s)"
+        #     get_category_id = "SELECT id FROM Category WHERE category_name = '%s'"
+        #     get_product_id = "SELECT id FROM Product WHERE product_name ='%s'"
+        #     # Insert ids in the reference table Category_product
+        #     request_all = "INSERT INTO Category_product (id_category, id_product) \
+        #         VALUES ( \
+        #             (SELECT id FROM Category WHERE category_name = %s), \
+        #             (SELECT id FROM Product WHERE product_name = %s) \
+        #         )"
+        #     # request_all = "INSERT INTO Category_product(id_category, id_product) \
+        #     #     VALUES (%s, %s)"
+        #     print(res_category, res)
             # self.cursor.execute(request % (res_category, res))
             # self.cursor.execute(request_all % (get_category_id, get_product_id))
             # self.connection.commit()

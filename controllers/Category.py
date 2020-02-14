@@ -18,12 +18,8 @@ class Category:
     def view(cls):
         sql = req.Request()
         result = sql.get_categories()
-
-        for res in result:
-            category_name = res[1]
-            cls.categories_list.append(category_name)
         
-        View.view_categories(cls.categories_list)
+        View.view_categories(result)
     
     @classmethod
     def get(cls):
@@ -42,8 +38,8 @@ class Category:
         """ Get the categories (and products) from API to insert in database """
         res = api.APIrequest()
         # res.get_datas()
-        products = res.get_datas()
-
+        products_categories = res.get_datas()
+        products = res.products
         # Product.insert(pro)
         for res in res.categories:
             category_name = res[0]
@@ -54,12 +50,12 @@ class Category:
         sql.set_categories(cls.categories_list)
 
         # Get the product from API to insert in database
-        # Product.insert(products)
+        Product.insert(products_categories, products)
 
         # cls.view()
 
     @classmethod
-    def delete(self):
+    def delete(cls):
         cls.categories_list = []
         sql = req.Request()
         sql.delete_categories()

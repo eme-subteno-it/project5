@@ -25,14 +25,14 @@ class Product:
         sql.check_category_product_table()
 
     @classmethod
-    def insert(cls, products):
+    def insert(cls, products_categories, products):
         """ Insert Products from API to database """
 
-        cls.products_list.append(products)
+        # cls.products_list.append(products)
         
         # Add in database
         sql = req.Request()
-        sql.set_products(cls.products_list)
+        sql.set_products(products_categories, products)
 
     def delete():
         pass

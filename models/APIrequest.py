@@ -17,7 +17,7 @@ class APIrequest:
         self.categories = []
         self.url_products = []
         self.result_parse = False
-        self.products = {}
+        self.products = []
 
     def call_api(self):
         res = request.urlopen(self.url).read()
@@ -49,25 +49,38 @@ class APIrequest:
 
             products = []
 
-            for x in range(10):
-                
+            for x in range(10): 
                 try:
                     product_name = self.result_parse['products'][x]['product_name']
                 except KeyError:
                     product_name = ''
                 
-                products.append(product_name)
+                # All products
+                self.products.append(product_name)
+                self.products = [i for i in self.products if i != '']
+                self.products = list(set(self.products)) # Delete the duplicate element
 
-                self.products = {
+                # Products with her category
+                products.append(product_name)
+                products = [i for i in products if i != '']
+                products = list(set(products)) # Delete the duplicate element
+
+                dict_products = {
                     'product_name': products,
                     'category_name': category_name
                 }
 
-                verify_product_name = self.products['product_name']
-                while '' in verify_product_name:
-                    del verify_product_name[verify_product_name.index('')]
+                # verify_product_name = dict_products['product_name']
+                # while '' in verify_product_name:
+                #     del verify_product_name[verify_product_name.index('')]
 
-                total_products.append(self.products)
-
-        print(total_products)
-        print(len(total_products))
+            total_products.append(dict_products)
+            
+        #     print('-----------')
+        #     print(self.products)
+        #     print('-----------')
+        # print('*******************************')
+        # print('-------------')
+        # print(total_products)
+        # print('-------------')
+        return total_products
