@@ -23,6 +23,10 @@ class Program:
     def start(cls):
         """ Begin the program : To call MySQL connector to connect user """
 
+        api = http.APIrequest()
+        api.get_datas()
+        exit()
+
         while cls.loop:
             action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
             print('------------------------')

@@ -37,35 +37,65 @@ class APIrequest:
             response_api = [result_categories, result_products_urls]
             self.categories.append(response_api)
 
-
         # Management Product URL
-        
         total_products = [] # List for add totaly products with her category
         for categorie in self.categories:
             category_name = categorie[0]
             url = categorie[1]
             self.url = url
             self.call_api()
+            
+            dict_all_products = {}
 
-            products = []
-
-            for x in range(10): 
+            for x in range(20): 
                 try:
                     product_name = self.result_parse['products'][x]['product_name']
+                    product_market = self.result_parse['products'][x]['stores']
+                    product_description = self.result_parse['products'][x]['ingredients_text_debug']
+                    product_url = self.result_parse['products'][x]['url']
+                    product_nutriscore = self.result_parse['products'][x]['nutriscore_score']
                 except KeyError:
                     product_name = ''
+                    product_market = ''
+                    product_description = ''
+                    product_url = ''
+                    product_nutriscore = '100'
+                
+                print('*******************************************************')
+                print('Product : ', product_name, 'Categorie : ', category_name)
+                print('*******************************************************')
 
-                # Products with her category
-                products.append(product_name)
-                products = [i for i in products if i != '']
-                products = list(set(products)) # Delete the duplicate element
+                products = {
+                    'name': product_name,
+                    'market': product_market,
+                    'description': product_description,
+                    'url': product_url,
+                    'nutriscore': product_nutriscore
+                }
+                print(products)
+                print('----------')
+                # result = {}
+                # for key, value in products.items():
+                #     if value not in result.values():
+                #         result[key] = value
 
-                dict_products = {
-                    'product_name': products,
-                    'category_name': category_name
+                dict_all_products = {
+                    'product': products,
+                    'category_name': category_name,
                 }
 
-            self.products = list(set(self.products + products))
-            total_products.append(dict_products)
+                # Products with her category
+                # products.append(product_name)
+                # products = [i for i in products if i != '']
+                # products = list(set(products)) # Delete the duplicate element
+
+                # dict_products = {
+                #     'product_name': products,
+                #     'category_name': category_name
+                # }
+
+            # self.products = list(set(self.products + products))
+            total_products.append(dict_all_products)
+        print(total_products)
 
         return total_products
