@@ -54,11 +54,6 @@ class APIrequest:
                     product_name = self.result_parse['products'][x]['product_name']
                 except KeyError:
                     product_name = ''
-                
-                # All products
-                self.products.append(product_name)
-                self.products = [i for i in self.products if i != '']
-                self.products = list(set(self.products)) # Delete the duplicate element
 
                 # Products with her category
                 products.append(product_name)
@@ -70,17 +65,7 @@ class APIrequest:
                     'category_name': category_name
                 }
 
-                # verify_product_name = dict_products['product_name']
-                # while '' in verify_product_name:
-                #     del verify_product_name[verify_product_name.index('')]
-
+            self.products = list(set(self.products + products))
             total_products.append(dict_products)
-            
-        #     print('-----------')
-        #     print(self.products)
-        #     print('-----------')
-        # print('*******************************')
-        # print('-------------')
-        # print(total_products)
-        # print('-------------')
+
         return total_products
