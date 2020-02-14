@@ -15,8 +15,4 @@ class View:
 
     def view_products(response):
         for res in response:
-            nb += 1
-            if nb <= 9:
-                print('0' + str(nb), '-', res)
-            else:
-                print(nb, '-', res)
+            print(res[0], '-', res[1])

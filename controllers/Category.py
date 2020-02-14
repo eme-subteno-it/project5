@@ -29,8 +29,8 @@ class Category:
         if len(result) == 0:
             cls.insert()
         else:
-            pr.Program.second_loop = 0
-            pr.Program.third_loop = 1
+            pr.Program.third_loop = 0
+            pr.Program.fourth_loop = 1
             cls.view()
 
     @classmethod
@@ -40,7 +40,7 @@ class Category:
         # res.get_datas()
         products_categories = res.get_datas()
         products = res.products
-        # Product.insert(pro)
+
         for res in res.categories:
             category_name = res[0]
             cls.categories_list.append(category_name)
@@ -52,7 +52,7 @@ class Category:
         # Get the product from API to insert in database
         Product.insert(products_categories, products)
 
-        # cls.view()
+        cls.view()
 
     @classmethod
     def delete(cls):

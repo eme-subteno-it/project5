@@ -73,20 +73,21 @@ class Program:
         for act in action:
             print(act)
 
-        product_choice = 0
         cls.choice = int(input('Tapez 1, 2 ou 3 : '))
         print('--------------------------------------------')
         if cls.choice == 1:
             print('Choisir une catégorie : ')
             Category.get()
-
-            cls.choice_category = int(input('Numéro de la catégorie : '))
-            # Product.get(cls.choice_category)
-            
+        
+        cls.choice_category = int(input('Numéro de la catégorie : '))
+        Product.get(cls.choice_category) # Display product
 
     @classmethod
     def choice_products(cls):
-        pass
+        cls.choice_product = int(input('Choisissez un produit : '))
+        Product.display_information(cls.choice_product)
+
+        
             # cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))
 
             # Affiche plusieurs propositions associées à un chiffre.
