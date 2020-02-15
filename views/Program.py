@@ -5,8 +5,8 @@ from models import APIrequest as http
 from models import Request as req
 from common import constants as const
 from controllers.User import *
-from controllers.Category import *
-from controllers.Product import *
+from controllers import Category as cat
+from controllers import Product as pro
 
 
 class Program:
@@ -22,11 +22,6 @@ class Program:
     @classmethod
     def start(cls):
         """ Begin the program : To call MySQL connector to connect user """
-
-        api = http.APIrequest()
-        api.get_datas()
-        exit()
-
         while cls.loop:
             action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
             print('------------------------')
@@ -64,7 +59,10 @@ class Program:
         
         cls.choice = int(input('1 - Oui || 2 - Non : '))
         if cls.choice == 1:
+            Category = cat.Category()
             Category.update()
+            cls.second_loop = 0
+            cls.third_loop = 1
         elif cls.choice == 2:
             cls.second_loop = 0
             cls.third_loop = 1
@@ -81,27 +79,17 @@ class Program:
         print('--------------------------------------------')
         if cls.choice == 1:
             print('Choisir une catégorie : ')
+            Category = cat.Category()
             Category.get()
         
-        cls.choice_category = int(input('Numéro de la catégorie : '))
-        Product.get(cls.choice_category) # Display product
+            cls.choice_category = int(input('Numéro de la catégorie : '))
+            Product = pro.Product()
+            Product.get(cls.choice_category) # Display product
+            cls.third_loop = 0
+            cls.fourth_loop = 1
 
     @classmethod
     def choice_products(cls):
         cls.choice_product = int(input('Choisissez un produit : '))
+        Product = pro.Product()
         Product.display_information(cls.choice_product)
-
-        
-            # cls.choice_product = int(input('Quel aliment souhaitez-vous substituer ? : '))
-
-            # Affiche plusieurs propositions associées à un chiffre.
-            # L'utilisateur entre le chiffre correspondant et valide.
-
-            # Proposition d'un substitut, sa description, un magasin où l'acheter et un lien
-
-            # L'utilisateur peut enregistrer le résultat en base s'il le souhaite
-        
-        # if cls.choice == 2:
-        #     cls.http.get_products()
-            # Afficher une liste d'aliment correspondant à un numéro. (son id ?)
-            # L'utilisateur pourra alors choisir son aliment et voir les informations

@@ -7,43 +7,64 @@ from views import Program as pr
 from controllers import User as user
 from controllers.Category import *
 
-
+    
 class Product:
 
-    products_list = []
-    choice_category = 0
+    
+    def __init__(self):
+        self.name = ''
+        self.description = ''
+        self.store = ''
+        self.url = ''
+        self.nutriscore = ''
+        self.category = ''
+    
+    def insert(self, name, desc, store, url, nutriscore, category):
+        self.name = name
+        self.description = desc
+        self.store = store
+        self.url = url
+        self.nutriscore = nutriscore
+        self.category = category
 
-    # @classmethod
-    # def view(cls):
-    #     sql.req.Request()
-    #     result = sql.get_products()
-    #     # Gestion de récupération d'id pour ensuite pouvoir afficher les bons produits. 
+        sql = req.Request()
+        result = sql.check_products(self.name)
 
-    @classmethod
-    def get(cls, choice_category):
+        if len(result) > 0:
+            pass
+        else:
+            products = (
+                self.name,
+                self.description,
+                self.store,
+                self.url,
+                self.nutriscore,
+            )
+            products_categories = {
+                'product_name': self.name,
+                'category_name': self.category
+            }
+
+            # Add in database
+            sql.set_products(products)
+            sql.set_products_categories(products_categories)
+            
+
+    def get(self, choice_category):
         # Check in database if products exist
         sql = req.Request()
         result = sql.get_products_by_category(choice_category)
         View.view_products(result)
 
-        pr.Program.third_loop = 0
-        pr.Program.fourth_loop = 1
-
-    @classmethod
-    def insert(cls, products_categories, products):
-        """ Insert Products from API to database """
-
-        # Add in database
+    def delete(self):
         sql = req.Request()
-        sql.set_products(products)
-        sql.set_products_categories(products_categories)
+        sql.delete_products()
 
-    def display_information(cls, choice_product):
+    def display_information(self, choice_product):
         pass
-
-    def delete():
-        pass
-
-    def update():
-        pass
-    
+        # sql = req.Request()
+        # result = sql.get_products(choice_product)
+        # View.view_informations_products(result)
+        
+        # Faire une recherche par nutriscore pour afficher
+        # un substitut au produit sélectionné. 

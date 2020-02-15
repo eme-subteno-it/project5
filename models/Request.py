@@ -71,9 +71,8 @@ class Request:
         return result
 
     def set_categories(self, response):
-        for res in response:
-            request_done = "INSERT INTO Category (category_name) VALUES (%s)"
-            self.cursor.execute(request_done, (res,))
+        request_done = "INSERT INTO Category (category_name) VALUES (%s)"
+        self.cursor.execute(request_done, (response,))
         self.connection.commit()
 
     def delete_categories(self):
@@ -85,63 +84,56 @@ class Request:
 # ------------------------------ PRODUCTS ------------------------------------
 # ----------------------------------------------------------------------------
 
-    def get_products(self):
-        request = "SELECT * FROM Category_product"
+    def delete_products(self):
+        request = "DELETE FROM Product"
         self.cursor.execute(request)
+        self.connection.commit()
+
+    def get_products(self, choice_product):
+        request = "SELECT * FROM Product WHERE id = %s"
+        self.cursor.execute(request, (choice_product,))
         result = self.cursor.fetchall()
 
         return result
 
-    # def check_category_product_table(self):
-    #     select_products = self.get_products()
-    #     if len(select_products) == 0:
-    #         Product.insert()
-    #     else:
-    #         for res in select_products:
-    #             pr.Program.third_loop = 0
-    #             pr.Program.fourth_loop = 1
-
-    #         Product.view()
+    def check_products(self, name):
+        request = "SELECT product_name FROM Product WHERE product_name = %s"
+        self.cursor.execute(request, (name,))
+        result = self.cursor.fetchall()
+        
+        return result
 
     def set_products(self, products):
-        select_product = self.get_products()
-        if len(select_product) == 0:
-            for res in products:
-                request = "INSERT INTO Product (product_name) VALUES (%s)"
-                self.cursor.execute(request, (res,))
-                self.connection.commit()
-        else:
-            exit()
+        request = "INSERT INTO Product (\
+            product_name, product_desc, product_store, product_url, product_nutriscore \
+            ) VALUES (%s, %s, %s, %s, %s)"
+        self.cursor.execute(request, products)
+        self.connection.commit()
 
 # ----------------------------------------------------------------------------
 # ------------------------ CATEGORY_PRODUCTS ---------------------------------
 # ----------------------------------------------------------------------------
+    def delete_ref_categories_products(self):
+        request = "DELETE FROM Category_product"
+        self.cursor.execute(request)
+        self.connection.commit()
+
 
     def set_products_categories(self, products_categories):
         """ Add the id's products and categories in reference table """
+        products = products_categories['product_name']
+        categories = products_categories['category_name']
 
-        for res in products_categories:
-            products = res['product_name']
-            categories = res['category_name']
-
-            for i in products:
-                try:
-                    request_all = "INSERT INTO Category_product (id_category, id_product) \
-                        VALUES ( \
-                            (SELECT id FROM Category WHERE category_name = %s), \
-                            (SELECT id FROM Product WHERE product_name = %s) \
-                        )"
-                    self.cursor.execute(request_all, (categories, i))
-                    self.connection.commit()
-                except mysql.connector.Error as err:
-                    pass
-
-    # def get_products(self, choice):
-    #     request = "SELECT id_product FROM Category_product WHERE id_category = %s"
-    #     self.cursor.execute(request, (choice,))
-    #     result = self.cursor.fetchall()
-
-    #     return result
+        try:
+            request_all = "INSERT INTO Category_product (id_category, id_product) \
+                VALUES ( \
+                    (SELECT id FROM Category WHERE category_name = %s), \
+                    (SELECT id FROM Product WHERE product_name = %s) \
+                )"
+            self.cursor.execute(request_all, (categories, products))
+            self.connection.commit()
+        except mysql.connector.Error as err:
+            pass
 
     def get_products_by_category(self, choice):
         request = "SELECT id, product_name FROM Product \
@@ -150,9 +142,3 @@ class Request:
         self.cursor.execute(request, (choice,))
         result = self.cursor.fetchall()
         return result
-
-# Lors du choix de la catégorie, il faut afficher les produits liés à celle-ci. 
-# Il faut vérifier que les produits n'existent pas déjà en base (pour éviter les doublons)
-# Sinon, les ajouter pour ne pas avoir à recharger tout le json à chaque fois... 
-# Après la vérif du nb category == nb, faire une méthode qui vérifie si nous possédons
-# les produits en base correspondant à la catégorie cité

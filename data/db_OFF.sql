@@ -41,6 +41,10 @@ ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS Product (
     id INT NOT NULL AUTO_INCREMENT,
     product_name VARCHAR(255) NOT NULL,
+    product_desc TEXT NULL,
+    product_store VARCHAR(255) NOT NULL,
+    product_url TEXT NOT NULL,
+    product_nutriscore INT NOT NULL,
     PRIMARY KEY (id)
 )
 ENGINE=InnoDB;

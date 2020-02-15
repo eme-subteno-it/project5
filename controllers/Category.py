@@ -5,64 +5,49 @@ from models import APIrequest as api
 from views.View import *
 from views import Program as pr
 from controllers import User as user
-from controllers.Product import *
+from controllers import Product as pro
 from colorama import init, Fore
 init(autoreset=True)
 
 
 class Category:
 
-    categories_list = []
-
-    @classmethod
-    def view(cls):
-        sql = req.Request()
-        result = sql.get_categories()
-        
-        View.view_categories(result)
     
-    @classmethod
-    def get(cls):
+    def __init__(self):
+        self.name = ''
+
+    def get(self):
         """ To get the categories in database if exists. Else we insert this """
         sql = req.Request()
         result = sql.get_categories()
+
         if len(result) == 0:
-            cls.insert()
+            res = api.APIrequest()
+            res.get_datas()
+            self.view()
         else:
-            pr.Program.third_loop = 0
-            pr.Program.fourth_loop = 1
-            cls.view()
+            View.view_categories(result)
 
-    @classmethod
-    def insert(cls):
-        """ Get the categories (and products) from API to insert in database """
-        res = api.APIrequest()
-        # res.get_datas()
-        products_categories = res.get_datas()
-        products = res.products
-
-        for res in res.categories:
-            category_name = res[0]
-            cls.categories_list.append(category_name)
-
+    def insert(self, name):
+        self.name = name
         # Add in database
         sql = req.Request()
-        sql.set_categories(cls.categories_list)
+        sql.set_categories(self.name)
 
-        # Get the product from API to insert in database
-        Product.insert(products_categories, products)
-
-        cls.view()
-
-    @classmethod
-    def delete(cls):
-        cls.categories_list = []
+    def view(self):
         sql = req.Request()
+        result = sql.get_categories()
+        View.view_categories(result)
+
+    def delete(self):
+        Product = pro.Product()
+
+        sql = req.Request()
+        sql.delete_ref_categories_products()
+        Product.delete()
         sql.delete_categories()
 
-    @classmethod
-    def update(cls):
-        nb = 0
+    def update(self):
         sql = req.Request()
         result = sql.get_categories()
 
@@ -71,9 +56,8 @@ class Category:
             print(Fore.RED + 'Aucune catégorie présente en base, veuillez poursuivre le programme.')
             print('--------------------------------------------------------------------')
         else:
-            sql = req.Request()
             # Delete olds Categories in database 
-            sql.delete_categories()
+            self.delete()
 
             # Get new Categories in API
-            cls.insert()
+            self.get()

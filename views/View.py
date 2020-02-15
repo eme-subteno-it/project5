@@ -16,3 +16,6 @@ class View:
     def view_products(response):
         for res in response:
             print(res[0], '-', res[1])
+
+    def view_informations_products(response):
+        print(response)
