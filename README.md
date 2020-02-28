@@ -21,35 +21,59 @@ _Pour l'ouvrir_ :
 
 ## Utilisation du programme
 
-* Assurez-vous d'avoir MySql d'installer en local.
+* **Assurez-vous d'avoir MySql d'installer en local.**
 
-* Connexion à MySQL
+* **Connexion à MySQL**
     * Insérer votre identifiant MySQL
     * Insérer votre mot de passe MySQL
 
-* Création d'un compte 
+* **Création d'un compte** 
     * Taper 1 afin de créer un compte.
     * Remplissez le formulaire.
     * Appuyez sur "Entrée"
 
-* Connexion
+    _A la suite de ces informations, un script se lancera afin de vous créer un compte utilisateur mysql et d'y installer
+    la base de données._
+
+* **Connexion**
     * Remplissez le formulaire
     * Appuyez sur "Entrée"
 
-* Choisir un aliment
+* **Choisir une catégorie**
+    * Taper le numéro situé devant la catégorie afin de l'a choisir et de voir apparaître ses produits.
 
-* Visualiser vos aliments sauvegardés
+* **Choisir un produit**
+    * Taper également le numéro situé devant le produit afin de voir apparaître les informations de celui-ci ainsi que 
+    son substitut.
+    * Vous aurez ensuite le choix de le sauvegarder.
 
-* Déconnexion \
-    La déconnexion s'effectuera lorsque vous quitterez le programme.
+* **Visualiser vos aliments sauvegardés**
+    * Un menu vous permet de visualiser les produits sauvegardés. Vous aurez alors la liste de tout vos produits 
+    sauvegardé avec toutes leurs informations.
+
+* **Mettre à jour les données**
+    * Vous aurez la possibilité dans ce programme de mettre à jour les données. En acceptant, vous devez prendre conscience
+    que ceci supprimera également vos produits substitués enregistrés.
+
+* **Déconnexion**
+    * La déconnexion s'effectuera lorsque vous quitterez le programme. En cliquant sur n'importe quelle touche non assignée.
 
 Développement
 =================
-## Configuration clé API (Open Food Facts)
-1. Installation\
-    https://world.openfoodfacts.org/api/v0/product/[code-barre].json
+Le programme a été conçu en orienté objet, avec la classe **"Program"** qui est le "moteur" de celui-ci. Cette classe possède
+toute les boucles nécessaires ainsi que certaines actions. Afin de récupérer toute les données (Catégories et produits), j'ai
+utilisé l'API Open Food Facts. Pour l'insertion en base de données, j'ai utilisé un connecteur mysql compatible avec Python
+et j'ai créé un script sql que vous pouvez retrouver dans le dossier /data permettant la création d'un utilisateur et d'une 
+base de données. Ainsi, l'utilisateur aura besoin d'insérer ses identifiants MySQL qu'une seule fois, à l'inscription. Puis,
+lors de la connexion au programme, l'utilisateur sera automatiquement connecté avec un identifiant SQL (présent dans le script sql).
 
-2. Configuration de base
+L'utilisateur peut, s'il le souhaite, mettre à jour ses données. Pour ce faire, j'ai créé différentes requêtes SQL que vous
+pouvez retrouver dans /models/Request.py qui DELETE (supprime) les valeurs présentes dans les tables afin de télécharger à
+nouveau du contenu. L'utilisateur doit alors avoir conscience que s'il met à jour les données, il perdra ses produits substitués 
+sauvegardés.
+
+![](/data/img.png)
+
 
 
 

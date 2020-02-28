@@ -24,7 +24,6 @@ class Category:
         if len(result) == 0:
             res = api.APIrequest()
             res.get_datas()
-            self.view()
         else:
             View.view_categories(result)
 

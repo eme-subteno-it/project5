@@ -8,3 +8,5 @@ DB_NAME = 'db_OFF'
 
 ROOT = ''
 PASSWORD = ''
+
+USER = ''

@@ -45,24 +45,8 @@ CREATE TABLE IF NOT EXISTS Product (
     product_store VARCHAR(255) NOT NULL,
     product_url TEXT NOT NULL,
     product_nutriscore INT NOT NULL,
+    nutriscore_grade VARCHAR(2) NULL,
     PRIMARY KEY (id)
-)
-ENGINE=InnoDB;
-
--- ------------------------------------------------
--- Table db_OFF.Substitute
--- ------------------------------------------------
-CREATE TABLE IF NOT EXISTS Substitute (
-    id INT NOT NULL AUTO_INCREMENT,
-    product_id INT NOT NULL,
-    subsitute_name VARCHAR(45) NOT NULL,
-    substitute_desc VARCHAR(255) NULL,
-    market_product VARCHAR(45) NULL,
-    api_link VARCHAR(400) NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_product_subsitute
-        FOREIGN KEY (product_id)
-        REFERENCES Product(id)
 )
 ENGINE=InnoDB;
 
@@ -82,16 +66,16 @@ CREATE TABLE IF NOT EXISTS Category_product (
 ENGINE=InnoDB;
 
 -- ------------------------------------------------
--- Table db_OFF.User_substitute
+-- Table db_OFF.User_product
 -- ------------------------------------------------
-CREATE TABLE IF NOT EXISTS User_substitute (
+CREATE TABLE IF NOT EXISTS User_product (
     id_user INT NOT NULL,
-    id_substitute INT NOT NULL,
+    id_product INT NOT NULL,
     CONSTRAINT fk_user_id
         FOREIGN KEY (id_user)
         REFERENCES User(id),
-    CONSTRAINT fk_substitute_id
-        FOREIGN KEY (id_substitute)
-        REFERENCES Substitute(id)
+    CONSTRAINT fk_product_substitute_id
+        FOREIGN KEY (id_product)
+        REFERENCES Product(id)
 )
 ENGINE=InnoDB;

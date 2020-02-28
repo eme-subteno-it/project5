@@ -7,6 +7,8 @@ from common import constants as const
 from controllers.User import *
 from controllers import Category as cat
 from controllers import Product as pro
+from colorama import init, Fore
+init(autoreset=True)
 
 
 class Program:
@@ -15,6 +17,7 @@ class Program:
     second_loop = 0
     third_loop = 0
     fourth_loop = 0
+    five_loop = 0
     choice = 0
     choice_category = 0
     api = http.APIrequest()
@@ -36,7 +39,6 @@ class Program:
                 Database.create_database()
                 Database.connect_user()
                 User.save_user_in_database()
-
             elif cls.choice == 2:
                 Database.connect_user()
                 User.check_the_user()
@@ -54,7 +56,7 @@ class Program:
 
     @classmethod
     def update_categories_or_not(cls):
-        action = 'Souhaitez-vous mettre à jour la liste des catégories ?'
+        action = 'Souhaitez-vous mettre à jour la liste des catégories ? (Cela impose la suppression de substituts enregistrés)'
         print(action)
         
         cls.choice = int(input('1 - Oui || 2 - Non : '))
@@ -66,6 +68,8 @@ class Program:
         elif cls.choice == 2:
             cls.second_loop = 0
             cls.third_loop = 1
+        else:
+            exit()
     
     @classmethod
     def choice_categories(cls):
@@ -78,7 +82,7 @@ class Program:
         cls.choice = int(input('Tapez 1, 2 ou 3 : '))
         print('--------------------------------------------')
         if cls.choice == 1:
-            print('Choisir une catégorie : ')
+            print(Fore.GREEN + 'Choisir une catégorie : ')
             Category = cat.Category()
             Category.get()
         
@@ -87,9 +91,23 @@ class Program:
             Product.get(cls.choice_category) # Display product
             cls.third_loop = 0
             cls.fourth_loop = 1
+        elif cls.choice == 2:
+            Product = pro.Product()
+            Product.view_substitute_saved()
+        else:
+            exit()
 
     @classmethod
     def choice_products(cls):
         cls.choice_product = int(input('Choisissez un produit : '))
         Product = pro.Product()
-        Product.display_information(cls.choice_product)
+        Product.display_information_product(cls.choice_product, cls.choice_category)
+
+        print('Souhaitez-vous sauvegarder ce substitut ? ')
+        choice_save = int(input('Oui (1) ou non (2) : '))
+        if choice_save == 1:
+            Product.save()
+        elif choice_save == 2:
+            cls.choice_categories()
+        else:
+            exit()

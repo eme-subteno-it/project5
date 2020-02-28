@@ -23,12 +23,11 @@ class Database:
             )
             cls.cursor = cls.connection.cursor()
             cls.state_db = True
+        except mysql.connector.Error as err:
+            print(err)
             if cls.state_db == False:
                 print('Please, install mysql on your local server.')
                 exit()
-        except mysql.connector.Error as err:
-            print(err)
-            exit()
 
     @classmethod
     def connect_user(cls):
@@ -41,10 +40,10 @@ class Database:
                 raise_on_warnings=True,
             )
             cls.cursor = cls.connection.cursor()
-        except mysql.connector.Error as err:
-            print('--------------------------------------------------------------------------------')
-            print(Fore.RED + str(err))
-            print('--------------------------------------------------------------------------------')
+        except mysql.connector.Error:
+            print('---------------------------------------------------------')
+            print(Fore.RED + 'Veuillez vous inscrire pour installer la base de données.')
+            print('---------------------------------------------------------')
             exit()
 
     @classmethod

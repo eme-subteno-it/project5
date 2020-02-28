@@ -8,7 +8,8 @@ from common import constants as const
 from models import Request as req
 from controllers import Category as cat
 from controllers import Product as pro
-import random
+from colorama import init, Fore
+init(autoreset=True)
 
 
 class APIrequest:
@@ -26,6 +27,9 @@ class APIrequest:
         self.result_parse = json.loads(result)
 
     def get_datas(self):
+        print('---------------------------')
+        print(Fore.GREEN + 'Ajout des catégories...')
+        print('---------------------------')
         self.url = 'https://fr.openfoodfacts.org/categories.json'
         self.call_api()
 
@@ -35,12 +39,14 @@ class APIrequest:
         for x in range(30):
             result_categories = self.result_parse['tags'][x]['name']
             result_products_urls = self.result_parse['tags'][x]['url'] + '.json'
-
             response_api = [result_categories, result_products_urls]
             self.categories.append(response_api)
             Category.insert(result_categories)
 
         # Management Product URL
+        print('-------------------------')
+        print(Fore.GREEN + 'Insertion des produits...')
+        print('-------------------------')
         for categorie in self.categories:
             category_name = categorie[0]
             url = categorie[1]
@@ -55,17 +61,14 @@ class APIrequest:
                     name = self.result_parse['products'][x]['product_name']
                     store = self.result_parse['products'][x]['stores']
                     desc = self.result_parse['products'][x]['ingredients_text_debug']
+                    code = self.result_parse['products'][x]['code']
                     p_url = self.result_parse['products'][x]['url']
                     nutriscore = self.result_parse['products'][x]['nutriscore_score']
+                    nutriscore_grade = self.result_parse['products'][x]['nutriscore_grade']
                 except KeyError:
                     name = ''
-                    store = 'Not found'
-                    desc = 'Not found'
-                    url = 'Not found'
-                    nutriscore = '100'
 
-                
                 if name != '':
-                    Product.insert(name, desc, store, url, nutriscore, category_name)
+                    Product.insert(name, desc, store, p_url, nutriscore, nutriscore_grade, category_name)
                 else:
                     pass

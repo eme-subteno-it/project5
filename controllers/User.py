@@ -4,6 +4,8 @@ import re
 import hashlib
 from views import Program as pr
 from models import Request as req
+from colorama import init, Fore
+init(autoreset=True)
 
 
 class User:
@@ -21,7 +23,11 @@ class User:
         if not EMAIL_REGEX.match(form_subscribe['email']):
             print("L'email indiqué n'est pas correctement configuré, merci de remplir à nouveau le formulaire.")
         elif form_subscribe['password'] != confirm_pass:
-            print('Les deux mots de passe ne correspondent pas, veuillez remplir à nouveau le formulaire.')
+            print('------------------------')
+            print(Fore.RED + 'Les deux mots de passe ne correspondent pas, veuillez remplir à nouveau le formulaire.')
+        elif form_subscribe['password'] == '':
+            print('------------------------')
+            print(Fore.RED + 'Mot de passe invalide.')
         else:
             hashed = hashlib.sha256(str(form_subscribe['password']).encode('utf-8')).hexdigest()
             form_subscribe['password'] = hashed
