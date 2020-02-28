@@ -14,7 +14,12 @@ from mysql.connector import errorcode
 
 
 class Request:
-
+    """
+        This class containing all sql request
+        :param arg1: Method of Database Class for keep the user's connexion
+        :param arg2: Attribute of Database Class for use the connector mysql
+        :param arg3: Attribute of Database Class for use the connector mysql
+    """
     
     def __init__(self, *args, **kwargs):
         Database.connect_user()
@@ -26,6 +31,10 @@ class Request:
 # ----------------------------------------------------------------------------
 
     def save_user(self, response):
+        """
+            Method for save the user in database
+            :param arg1: (dict) composed user's informations get in inscription form
+        """
         res_email = response['email']
         request = "SELECT * FROM User WHERE email = '%s'"
         self.cursor.execute(request % res_email)
@@ -44,6 +53,10 @@ class Request:
             self.connect_user(response)
 
     def connect_user(self, response):
+        """
+            Method for connect user
+            :param arg1: (dict) composed user's login get in connexion form
+        """
         res_email = response['email']
         res_pass = response['password']
         request = "SELECT * FROM User WHERE email = '%s' AND pass = '%s'"
@@ -66,6 +79,7 @@ class Request:
 # ----------------------------------------------------------------------------
 
     def get_categories(self):
+        """ Method for get the categories in database """
         request = "SELECT * FROM Category"
         self.cursor.execute(request)
         result = self.cursor.fetchall()
@@ -73,11 +87,16 @@ class Request:
         return result
 
     def set_categories(self, response):
+        """
+            Method to insert the categories in database
+            :param arg1: (list) of categories get in API
+        """
         request_done = "INSERT INTO Category (category_name) VALUES (%s)"
         self.cursor.execute(request_done, (response,))
         self.connection.commit()
 
     def delete_categories(self):
+        """ Method for delete the categories in database """
         request = "DELETE FROM Category"
         self.cursor.execute(request)
         self.connection.commit()
@@ -87,11 +106,16 @@ class Request:
 # ----------------------------------------------------------------------------
 
     def delete_products(self):
+        """ Method for delete the products """
         request = "DELETE FROM Product"
         self.cursor.execute(request)
         self.connection.commit()
 
     def get_products(self, choice_product):
+        """
+            Method for get the porducts in database
+            :param arg1: (int) Product's id choose by the user
+        """
         request = "SELECT * FROM Product WHERE id = %s"
         self.cursor.execute(request, (choice_product,))
         result = self.cursor.fetchall()
@@ -99,6 +123,10 @@ class Request:
         return result
 
     def check_products(self, name):
+        """
+            Method for check if the product already exist in database before insertion.
+            :param arg1: (string) The product name
+        """
         request = "SELECT product_name FROM Product WHERE product_name = %s"
         self.cursor.execute(request, (name,))
         result = self.cursor.fetchall()
@@ -106,6 +134,10 @@ class Request:
         return result
 
     def set_products(self, products):
+        """
+            Method for insert the products in database
+            :param arg1: (tuple) with all product's informations get in API
+        """
         print(products)
         request = "INSERT INTO Product (\
             product_name, product_desc, product_store, product_url, product_nutriscore, nutriscore_grade \
@@ -117,13 +149,20 @@ class Request:
 # ------------------------ CATEGORY_PRODUCTS ---------------------------------
 # ----------------------------------------------------------------------------
     def delete_ref_categories_products(self):
+        """
+            Method for delete the ids Category and products in reference table Category_product
+            Called after the insertion of categories and products in database
+        """
         request = "DELETE FROM Category_product"
         self.cursor.execute(request)
         self.connection.commit()
 
 
     def set_products_categories(self, products_categories):
-        """ Add the id's products and categories in reference table """
+        """
+            Add the id's products and categories in reference table
+            :param arg1: (dict) containing all ids products and categories get in database
+        """
         products = products_categories['product_name']
         categories = products_categories['category_name']
 
@@ -139,6 +178,11 @@ class Request:
             print(err)
 
     def get_products_by_category(self, choice):
+        """
+            Method for get the products by category
+            Called for display the products.
+            :param arg1: (int) id's category get by the user's choice
+        """
         request = "SELECT id, product_name, product_desc, product_store, product_url, product_nutriscore, \
                 nutriscore_grade FROM Product \
                 INNER JOIN Category_product ON Product.id = Category_product.id_product \
@@ -147,19 +191,16 @@ class Request:
         result = self.cursor.fetchall()
         return result
 
-    def get_category_by_product(self, choice):
-        request = "SELECT id FROM Category \
-                INNER JOIN Category_product ON Category.id = Category_product.id_category \
-                WHERE id_product = %s"
-        self.cursor.execute(request % choice)
-        result = self.cursor.fetchone()
-        return result
-
 # ----------------------------------------------------------------------------
 # ------------------------------- SUBSTITUTE ---------------------------------
 # ----------------------------------------------------------------------------
 
     def comparison_products(self, nutri, id_category):
+        """
+            Method to comparate the products in order to selected the substitute
+            :param arg1: (int) The nutriscore of the product selected
+            :param arg2: (int) The category's id for comparate the products in the category choose
+        """
         request = "SELECT * FROM Product \
                 INNER JOIN Category_product ON Product.id = Category_product.id_product \
                 WHERE product_nutriscore < %s AND id_category = %s"
@@ -168,6 +209,10 @@ class Request:
         return result
 
     def save_product(self, id_product):
+        """
+            Method to save a substitute with the displayed product's id
+            :param arg1: (int) Product's id get in database
+        """
         check = "SELECT * FROM User_product WHERE id_user = '%s' AND id_product = '%s'"
         self.cursor.execute(check % (const.USER, id_product))
         checked = self.cursor.fetchall()
@@ -186,6 +231,7 @@ class Request:
             View.save_product()
 
     def get_substitute_saved(self):
+        """ Method to get the substitute saved in database """
         request = "SELECT * FROM Product \
                 INNER JOIN User_product ON Product.id = User_product.id_product \
                 WHERE User_product.id_user = %s"
@@ -193,7 +239,11 @@ class Request:
         result = self.cursor.fetchall()
         return result
 
-    def delete_ref_substitute(self, id_substitute):
+    def delete_ref_substitute(self, id_user):
+        """
+            Method to delete the value reference table User_product when the user update the datas
+            :param arg1: (int) Get the user's id in constant declared when the user to login
+        """
         request = "DELETE FROM User_product WHERE id_user = %s"
         self.cursor.execute(request, (id_substitute,))
         self.connection.commit()

@@ -73,14 +73,3 @@ nouveau du contenu. L'utilisateur doit alors avoir conscience que s'il met à jo
 sauvegardés.
 
 ![](/data/img.png)
-
-
-
-
-<!-- 
-- Déterminer la liste des fonctionnalités à fournir
-- Écricre la doc complète
-- Vérifier que la doc est bien respectée
-- Itérer
-
-Créer un espace développeur (comment le logiciel a été conçu) et un espace client (comment utiliser le programme) -->

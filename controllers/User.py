@@ -9,9 +9,11 @@ init(autoreset=True)
 
 
 class User:
+    """ Static Class for displayed the forms to connect or register a user """
 
     @staticmethod
     def save_user_in_database():
+        """ Method displayed a form for register a user """
         form_subscribe = {
             'username': input('Tapez votre prénom : '),
             'email': input('Tapez votre e-mail : '),
@@ -36,6 +38,7 @@ class User:
 
     @staticmethod
     def check_the_user():
+        """ Method displayed a form for connect a user """
         form_connection = {
             'email': input('E-mail : '),
             'password': input('Mot de passe : '),

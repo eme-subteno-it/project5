@@ -12,12 +12,21 @@ init(autoreset=True)
 
 
 class Program:
+    """
+        Program's Engine containing all loops - ClassMethod
+        :param arg1: The first loop containing the connexion to database
+        :param arg2: The second loop containing the menu update or not datas
+        :param arg3: The third loop containing the category's choice
+        :param arg4: The fourth loop containing the product's choice and saved the substitute
+        :param arg5: The user's choice
+        :param arg6: The user's choice category
+        :param arg7: Object APIrequest()
+    """
 
     loop = 1
     second_loop = 0
     third_loop = 0
     fourth_loop = 0
-    five_loop = 0
     choice = 0
     choice_category = 0
     api = http.APIrequest()
@@ -25,6 +34,7 @@ class Program:
     @classmethod
     def start(cls):
         """ Begin the program : To call MySQL connector to connect user """
+
         while cls.loop:
             action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
             print('------------------------')
@@ -43,10 +53,10 @@ class Program:
                 Database.connect_user()
                 User.check_the_user()
             else:
-                cls.loop = 0
+                exit()
         
         while cls.second_loop:
-            cls.update_categories_or_not()
+            cls.update_datas_or_not()
 
         while cls.third_loop:
             cls.choice_categories()
@@ -55,8 +65,10 @@ class Program:
             cls.choice_products()
 
     @classmethod
-    def update_categories_or_not(cls):
-        action = 'Souhaitez-vous mettre à jour la liste des catégories ? (Cela impose la suppression de substituts enregistrés)'
+    def update_datas_or_not(cls):
+        """ The menu to update or not the datas (categories, products) """
+
+        action = 'Souhaitez-vous mettre à jour les données ? (Cela impose la suppression de substituts enregistrés)'
         print(action)
         
         cls.choice = int(input('1 - Oui || 2 - Non : '))
@@ -73,6 +85,11 @@ class Program:
     
     @classmethod
     def choice_categories(cls):
+        """
+            The menu to substitute a product by choosing a category and view the product.
+            Or, to view the products saved.
+        """
+
         action = ["1 - Substituer un aliment.", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
 
         print('--------------------------------------------')
@@ -99,6 +116,8 @@ class Program:
 
     @classmethod
     def choice_products(cls):
+        """ The menu to choice a product for view the substitute and save it if the user wishes """
+
         cls.choice_product = int(input('Choisissez un produit : '))
         Product = pro.Product()
         Product.display_information_product(cls.choice_product, cls.choice_category)

@@ -10,20 +10,34 @@ init(autoreset=True)
 
 
 class View:
+    """ Static class call when you need display elements like products, categories, substitute, messages ... """
     
     @staticmethod
     def view_categories(response):
+        """
+            Method to view the categories
+            :param arg1: The list of categories get in database
+        """
         for res in response:
             print(res[0], '-', res[1])
 
     @staticmethod
     def view_products(response):
+        """
+            Method to view the products
+            :param arg1: The list of products compared by the user's choice category get in database
+        """
         print(' ')
         for res in response:
             print(res[0], '-', res[1])
 
     @staticmethod
     def view_informations_products(response):
+        """
+            Method to view the products selected informations
+            :param arg1: The product's informations get in database
+        """
+
         print(' ')
         print(Fore.YELLOW + 'Vous avez sélectionné le produit suivant : ')
         print(' ')
@@ -38,6 +52,10 @@ class View:
 
     @staticmethod
     def view_substitute(response):
+        """
+            Method to view the substitute compared the choice's user product
+            :param arg1: The informations of substitute selected
+        """
         print(' ')
         print(Fore.GREEN + 'Voici le substitut de ce produit : ')
         print(' ')
@@ -52,11 +70,15 @@ class View:
 
     @staticmethod
     def save_product():
+        """ Message for indicate to the user that the substitute is saved """
         print('Le produit a bien été enregistré.')
 
     @staticmethod
     def view_substitute_saved(response):
-        print(response)
+        """
+            Method for view the substitute saved
+            :param arg1: Get the informations of substitutes saved in the reference table User_product
+        """
         for res in response:
             print(' ')
             print('+-------------------------------------------------------------------------------------------------+')
@@ -76,10 +98,12 @@ class View:
 
     @staticmethod
     def no_substitute_saved():
+        """ Message for indicate to the user he don't have saved substitute """
         print(Fore.RED + "Vous n'avez pas de substituts d'enregistré.")
 
     @staticmethod
     def no_view_substitute():
+        """ Message for indicate to the user that the product does'nt get a substitute """
         print('---------------------------------------')
         print(Fore.RED + 'Ce produit ne possède pas de substitut.')
         print('---------------------------------------')

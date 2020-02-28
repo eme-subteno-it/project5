@@ -7,6 +7,12 @@ import mysql.connector
 from mysql.connector import errorcode
 
 class Database:
+    """
+        Class to get the connexion to mysql database with the connector and create the database
+        :param arg1: (String) Nothing by default, is the cursor for the connection mysql
+        :param arg2: (String) Nothing by default, is the object connection of connector mysql
+        :param arg3: (Bool) False by default, is an attribute for control the state of connection mysql
+    """
 
     cursor = ''
     connection = ''
@@ -14,6 +20,7 @@ class Database:
 
     @classmethod
     def first_connect(cls):
+        """ Method for the first connection in the program. Called when the user choose to subscribe. """
         try:
             cls.connection = mysql.connector.connect(
                 user=const.ROOT,
@@ -31,6 +38,7 @@ class Database:
 
     @classmethod
     def connect_user(cls):
+        """ Method for connect the user in the program. Called when the user choose to connect. """
         try:
             cls.connection = mysql.connector.connect(
                 user='accountdb',
@@ -48,6 +56,7 @@ class Database:
 
     @classmethod
     def create_database(cls):
+        """ Method for create the database. Called when the user to connect for the first time. """
         cls.first_connect()
         try:
             sql = open("data/db_OFF.sql").read()

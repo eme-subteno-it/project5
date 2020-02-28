@@ -13,20 +13,26 @@ init(autoreset=True)
 
 
 class APIrequest:
+    """
+        Method for get the datas in the API OpenFoodFacts
+        :param arg1: (String) Empty by default, but it will the url called for get the datas
+        :param arg2: (List) Empty by default, but it will contain the name of category and her url to reach her products
+        :param arg3: False by default, but it will contain the result of API call (the datas)
+    """
 
     def __init__(self):
         self.url = ''
         self.categories = []
-        self.url_products = []
         self.result_parse = False
-        self.products = []
 
     def call_api(self):
+        """ Method to call api by a request GET and return a json result """
         res = request.urlopen(self.url).read()
         result = res.decode('utf8')
         self.result_parse = json.loads(result)
 
     def get_datas(self):
+        """ Method for get all datas (Categories and products) """
         print('---------------------------')
         print(Fore.GREEN + 'Ajout des catégories...')
         print('---------------------------')
