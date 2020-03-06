@@ -56,7 +56,7 @@ _Pour l'ouvrir_ :
     que ceci supprimera également vos produits substitués enregistrés.
 
 * **Déconnexion**
-    * La déconnexion s'effectuera lorsque vous quitterez le programme. En cliquant sur n'importe quelle touche non assignée.
+    * La déconnexion s'effectuera lorsque vous quitterez le programme. Ou en cliquant sur n'importe quelle touche non assignée.
 
 Développement
 =================
