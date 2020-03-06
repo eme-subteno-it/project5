@@ -1,22 +1,24 @@
 #! /usr/bin/env python
 # coding: utf-8
-from colorama import init, Fore
-init(autoreset=True)
-from  urllib import request
+# pylint: disable=invalid-name
+""" The models module containing all requests of program """
 import json
-from common import constants as const
-from models import Request as req
-from controllers import Category as cat
-from controllers import Product as pro
-from colorama import init, Fore
+
+from urllib         import request
+from colorama       import init, Fore
+from controllers    import Category     as cat
+from controllers    import Product      as pro
+
 init(autoreset=True)
+
 
 
 class APIrequest:
     """
         Method for get the datas in the API OpenFoodFacts
         :param arg1: (String) Empty by default, but it will the url called for get the datas
-        :param arg2: (List) Empty by default, but it will contain the name of category and her url to reach her products
+        :param arg2: (List) Empty by default,\
+            but it will contain the name of category and her url to reach her products
         :param arg3: False by default, but it will contain the result of API call (the datas)
     """
 
@@ -24,6 +26,7 @@ class APIrequest:
         self.url = ''
         self.categories = []
         self.result_parse = False
+        self.response_api = []
 
     def call_api(self):
         """ Method to call api by a request GET and return a json result """
@@ -41,12 +44,12 @@ class APIrequest:
 
         # Management categories for to get a list
         Category = cat.Category()
-        response_api = []
-        for x in range(30):
-            result_categories = self.result_parse['tags'][x]['name']
-            result_products_urls = self.result_parse['tags'][x]['url'] + '.json'
-            response_api = [result_categories, result_products_urls]
-            self.categories.append(response_api)
+
+        for i in range(30):
+            result_categories = self.result_parse['tags'][i]['name']
+            result_products_urls = self.result_parse['tags'][i]['url'] + '.json'
+            self.response_api = [result_categories, result_products_urls]
+            self.categories.append(self.response_api)
             Category.insert(result_categories)
 
         # Management Product URL
@@ -58,19 +61,18 @@ class APIrequest:
             url = categorie[1]
             self.url = url
             self.call_api()
-            
+
             Product = pro.Product()
 
-            for x in range(20): 
+            for i in range(20):
 
                 try:
-                    name = self.result_parse['products'][x]['product_name']
-                    store = self.result_parse['products'][x]['stores']
-                    desc = self.result_parse['products'][x]['ingredients_text_debug']
-                    code = self.result_parse['products'][x]['code']
-                    p_url = self.result_parse['products'][x]['url']
-                    nutriscore = self.result_parse['products'][x]['nutriscore_score']
-                    nutriscore_grade = self.result_parse['products'][x]['nutriscore_grade']
+                    name = self.result_parse['products'][i]['product_name']
+                    store = self.result_parse['products'][i]['stores']
+                    desc = self.result_parse['products'][i]['ingredients_text_debug']
+                    p_url = self.result_parse['products'][i]['url']
+                    nutriscore = self.result_parse['products'][i]['nutriscore_score']
+                    nutriscore_grade = self.result_parse['products'][i]['nutriscore_grade']
                 except KeyError:
                     name = ''
 

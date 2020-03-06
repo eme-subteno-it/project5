@@ -1,13 +1,17 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models.Database import *
-from models import APIrequest as http
-from models import Request as req
-from common import constants as const
-from controllers.User import *
-from controllers import Category as cat
-from controllers import Product as pro
-from colorama import init, Fore
+# pylint: disable=invalid-name
+""" The views module containing all views of program """
+
+import sys
+
+from colorama         import init, Fore
+from models           import Database    as db
+from controllers      import User        as us
+from controllers      import Category    as cat
+from controllers      import Product     as pro
+from common           import constants   as const
+
 init(autoreset=True)
 
 
@@ -29,11 +33,10 @@ class Program:
     fourth_loop = 0
     choice = 0
     choice_category = 0
-    api = http.APIrequest()
 
     @classmethod
     def start(cls):
-        """ Begin the program : To call MySQL connector to connect user """
+        """ Begin the program : To connect the user """
 
         while cls.loop:
             action = ["1 - S'enregistrer", "2 - Se connecter", "3 - Quitter le programme."]
@@ -46,15 +49,15 @@ class Program:
             if cls.choice == 1:
                 const.ROOT = input('Entrez votre identifiant MySQL : ')
                 const.PASSWORD = input('Entrez votre mot de passe MySQL : ')
-                Database.create_database()
-                Database.connect_user()
-                User.save_user_in_database()
+                db.Database().create_database()
+                db.Database().connect_user()
+                us.User().save_user_in_database()
             elif cls.choice == 2:
-                Database.connect_user()
-                User.check_the_user()
+                db.Database().connect_user()
+                us.User().check_the_user()
             else:
-                exit()
-        
+                sys.exit()
+
         while cls.second_loop:
             cls.update_datas_or_not()
 
@@ -68,9 +71,10 @@ class Program:
     def update_datas_or_not(cls):
         """ The menu to update or not the datas (categories, products) """
 
-        action = 'Souhaitez-vous mettre à jour les données ? (Cela impose la suppression de substituts enregistrés)'
+        action = 'Souhaitez-vous mettre à jour les données ?'\
+               + Fore.RED + '\n(Cela impose la suppression de substituts enregistrés)'
         print(action)
-        
+
         cls.choice = int(input('1 - Oui || 2 - Non : '))
         if cls.choice == 1:
             Category = cat.Category()
@@ -81,8 +85,8 @@ class Program:
             cls.second_loop = 0
             cls.third_loop = 1
         else:
-            exit()
-    
+            sys.exit()
+
     @classmethod
     def choice_categories(cls):
         """
@@ -90,7 +94,11 @@ class Program:
             Or, to view the products saved.
         """
 
-        action = ["1 - Substituer un aliment.", "2 - Voir mes aliments substitués.", "3 - Quitter le programme"]
+        action = [
+            "1 - Substituer un aliment.",
+            "2 - Voir mes aliments substitués.",
+            "3 - Quitter le programme"
+        ]
 
         print('--------------------------------------------')
         for act in action:
@@ -102,7 +110,7 @@ class Program:
             print(Fore.GREEN + 'Choisir une catégorie : ')
             Category = cat.Category()
             Category.get()
-        
+
             cls.choice_category = int(input('Numéro de la catégorie : '))
             Product = pro.Product()
             Product.get(cls.choice_category) # Display product
@@ -112,13 +120,13 @@ class Program:
             Product = pro.Product()
             Product.view_substitute_saved()
         else:
-            exit()
+            sys.exit()
 
     @classmethod
     def choice_products(cls):
         """ The menu to choice a product for view the substitute and save it if the user wishes """
 
-        cls.choice_product = int(input('Choisissez un produit : '))
+        cls.choice_product = int(input('Numéro du produit : '))
         Product = pro.Product()
         Product.display_information_product(cls.choice_product, cls.choice_category)
 
@@ -126,7 +134,8 @@ class Program:
         choice_save = int(input('Oui (1) ou non (2) : '))
         if choice_save == 1:
             Product.save()
+            cls.choice_categories()
         elif choice_save == 2:
             cls.choice_categories()
         else:
-            exit()
+            sys.exit()

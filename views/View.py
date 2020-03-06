@@ -1,17 +1,16 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import APIrequest as http
-from models import Request as req
-from common import constants as const
-from controllers.User import *
-from controllers.Category import *
+# pylint: disable=invalid-name
+""" The views module containing all views of program """
+
 from colorama import init, Fore
 init(autoreset=True)
 
 
 class View:
-    """ Static class call when you need display elements like products, categories, substitute, messages ... """
-    
+    """ Static class call when you need display elements
+    like products, categories, substitute, messages ... """
+
     @staticmethod
     def view_categories(response):
         """
@@ -28,6 +27,7 @@ class View:
             :param arg1: The list of products compared by the user's choice category get in database
         """
         print(' ')
+        print(Fore.GREEN + 'Choisir un produit : ')
         for res in response:
             print(res[0], '-', res[1])
 
@@ -71,13 +71,16 @@ class View:
     @staticmethod
     def save_product():
         """ Message for indicate to the user that the substitute is saved """
-        print('Le produit a bien été enregistré.')
+        print('---------------------------------')
+        print(Fore.GREEN + 'Le produit a bien été enregistré.')
+        print('---------------------------------')
 
     @staticmethod
     def view_substitute_saved(response):
         """
             Method for view the substitute saved
-            :param arg1: Get the informations of substitutes saved in the reference table User_product
+            :param arg1: Get the informations of substitutes saved
+            in the reference table User_product
         """
         for res in response:
             print(' ')

@@ -1,15 +1,14 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Request as req
-from models import APIrequest as api
-from views.View import *
-from views import Program as pr
-from common import constants as const
-from controllers import User as user
-from controllers.Category import *
+# pylint: disable=invalid-name, too-many-instance-attributes, too-many-arguments
+""" The controllers module containing all actions and treatment of program """
 import random
 
-    
+from models    import Request    as req
+from views     import View       as vw
+from common    import constants  as const
+
+
 class Product:
     """
         Class for manage the products and substitutes
@@ -22,7 +21,7 @@ class Product:
         :param arg7: (String) The product nutriscore grade
         :param arg8: (String) The product category name
     """
-    
+
     def __init__(self):
         self.id = 0
         self.name = ''
@@ -32,7 +31,7 @@ class Product:
         self.nutriscore = 100
         self.nutriscore_grade = ''
         self.category = ''
-    
+
     def insert(self, name, desc, store, url, nutriscore, nutriscore_grade, category):
         """
         Method for insert the products in database compared to category
@@ -72,18 +71,19 @@ class Product:
         products_categories = {
             'product_name': self.name,
             'category_name': self.category
-        }   
+        }
         sql.set_products_categories(products_categories)
-            
 
-    def get(self, choice_category):
+    @staticmethod
+    def get(choice_category):
         """ Method to get the product compared to the choice's user of category """
         # Check in database if products exist
         sql = req.Request()
         result = sql.get_products_by_category(choice_category)
-        View.view_products(result)
+        vw.View().view_products(result)
 
-    def delete(self):
+    @staticmethod
+    def delete():
         """ Method to delete the products in the reference table Category_product and Product """
         sql = req.Request()
         sql.delete_ref_substitute(const.USER)
@@ -91,7 +91,8 @@ class Product:
 
     def display_information_product(self, choice_product, choice_category):
         """
-            Method to display the substitute informations thanks to choice product and choice category
+            Method to display the substitute informations thanks
+            to choice product and choice category.
             :param arg1: (int) The user's choice of product
             :param arg1: (int) The user's choice of category
         """
@@ -99,7 +100,7 @@ class Product:
 
         # Get the product
         product = sql.get_products(choice_product)
-        View.view_informations_products(product)
+        vw.View().view_informations_products(product)
 
         for element in product:
             nutri = element[5]
@@ -111,22 +112,23 @@ class Product:
         if substitutes:
             substitute = random.choice(substitutes)
             self.id = substitute[0]
-            View.view_substitute(substitute)
+            vw.View().view_substitute(substitute)
         else:
             self.id = choice_product
-            View.no_view_substitute()
+            vw.View().no_view_substitute()
 
     def save(self):
         """ Method to save the substitute """
         sql = req.Request()
         sql.save_product(self.id)
 
-    def view_substitute_saved(self):
+    @staticmethod
+    def view_substitute_saved():
         """ Method to view the substitutes saved in database """
         sql = req.Request()
         substitute_saved = sql.get_substitute_saved()
 
         if substitute_saved:
-            View.view_substitute_saved(substitute_saved)
+            vw.View().view_substitute_saved(substitute_saved)
         else:
-            View.no_substitute_saved()
+            vw.View().no_substitute_saved()

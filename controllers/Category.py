@@ -1,25 +1,28 @@
 #! /usr/bin/env python
 # coding: utf-8
-from models import Request as req
-from models import APIrequest as api
-from views.View import *
-from views import Program as pr
-from controllers import User as user
-from controllers import Product as pro
-from colorama import init, Fore
+# pylint: disable=invalid-name
+""" The controllers module containing all actions and treatment of program """
+
+from colorama      import init, Fore
+from models        import Request       as req
+from models        import APIrequest    as api
+from views         import View          as vw
+from controllers   import Product       as pro
+
 init(autoreset=True)
 
 
 class Category:
     """
-        Class for manage the categories 
+        Class for manage the categories
         :param arg: The category name
     """
-    
+
     def __init__(self):
         self.name = ''
 
-    def get(self):
+    @staticmethod
+    def get():
         """ To get the categories in database if exists. Else we insert this """
         sql = req.Request()
         result = sql.get_categories()
@@ -28,10 +31,10 @@ class Category:
             res = api.APIrequest()
             res.get_datas()
         else:
-            View.view_categories(result)
+            vw.View().view_categories(result)
 
     def insert(self, name):
-        """ 
+        """
             Method for insert the category name in database
             :param arg1: The category name get in API
         """
@@ -40,14 +43,12 @@ class Category:
         sql = req.Request()
         sql.set_categories(self.name)
 
-    def view(self):
-        """  Method called the method class View for displayed the categories """
-        sql = req.Request()
-        result = sql.get_categories()
-        View.view_categories(result)
-
-    def delete(self):
-        """ Method for delete the categories in reference table Category_product, Product and Category """
+    @staticmethod
+    def delete():
+        """
+            Method for delete the categories in reference table
+            Category_product, Product and Category
+        """
         Product = pro.Product()
 
         sql = req.Request()
@@ -56,16 +57,19 @@ class Category:
         sql.delete_categories()
 
     def update(self):
-        """ Method to update the datas in the database. She delete the datas and get the new datas in API """
+        """
+            Method to update the datas in the database.
+            She delete the datas and get the new datas in API
+        """
         sql = req.Request()
         result = sql.get_categories()
 
-        if not(result):
+        if not result:
             print('--------------------------------------------------------------------')
             print(Fore.RED + 'Aucune catégorie présente en base, veuillez poursuivre le programme.')
             print('--------------------------------------------------------------------')
         else:
-            # Delete olds Categories in database 
+            # Delete olds Categories in database
             self.delete()
 
             # Get new Categories in API

@@ -1,10 +1,14 @@
 #! /usr/bin/env python
 # coding: utf-8
+# pylint: disable=invalid-name
+""" The controllers module containing all actions and treatment of program """
 import re
 import hashlib
-from views import Program as pr
-from models import Request as req
-from colorama import init, Fore
+
+from colorama   import init, Fore
+from models     import Request      as req
+
+
 init(autoreset=True)
 
 

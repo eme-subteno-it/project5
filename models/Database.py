@@ -1,26 +1,30 @@
 #! /usr/bin/env python
 # coding: utf-8
-from colorama import init, Fore
-init(autoreset=True)
-from common import constants as const
+# pylint: disable=invalid-name
+""" The models module containing all requests of program """
+import sys
 import mysql.connector
-from mysql.connector import errorcode
+
+from colorama   import init, Fore
+from common     import constants  as const
+
+init(autoreset=True)
+
 
 class Database:
     """
         Class to get the connexion to mysql database with the connector and create the database
         :param arg1: (String) Nothing by default, is the cursor for the connection mysql
         :param arg2: (String) Nothing by default, is the object connection of connector mysql
-        :param arg3: (Bool) False by default, is an attribute for control the state of connection mysql
     """
 
-    cursor = ''
-    connection = ''
-    state_db = False
+    cursor = None
+    connection = None
 
     @classmethod
     def first_connect(cls):
-        """ Method for the first connection in the program. Called when the user choose to subscribe. """
+        """ Method for the first connection in the program.
+            Called when the user choose to subscribe. """
         try:
             cls.connection = mysql.connector.connect(
                 user=const.ROOT,
@@ -29,12 +33,9 @@ class Database:
                 raise_on_warnings=True,
             )
             cls.cursor = cls.connection.cursor()
-            cls.state_db = True
-        except mysql.connector.Error as err:
-            print(err)
-            if cls.state_db == False:
-                print('Please, install mysql on your local server.')
-                exit()
+        except mysql.connector.Error:
+            print('Please, install mysql on your local server.')
+            sys.exit()
 
     @classmethod
     def connect_user(cls):
@@ -52,7 +53,7 @@ class Database:
             print('---------------------------------------------------------')
             print(Fore.RED + 'Veuillez vous inscrire pour installer la base de données.')
             print('---------------------------------------------------------')
-            exit()
+            sys.exit()
 
     @classmethod
     def create_database(cls):
@@ -68,5 +69,3 @@ class Database:
             print('--------------------------------------------------------------------------------')
             print(Fore.RED + str(err))
             print('--------------------------------------------------------------------------------')
-
-    

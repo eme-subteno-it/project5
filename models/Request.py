@@ -1,16 +1,16 @@
 #! /usr/bin/env python
 # coding: utf-8
-from colorama import init, Fore
-init(autoreset=True)
-from controllers.Category import *
-from controllers.Product import *
-from common import constants as const
-from views import Program as pr
-from views.View import *
-from models.Database import *
-from models import APIrequest as http
+# pylint: disable=invalid-name
+""" The models module containing all requests of program """
 import mysql.connector
-from mysql.connector import errorcode
+
+from colorama        import init, Fore
+from views           import Program     as pr
+from views           import View        as vw
+from common          import constants   as const
+from models          import Database    as db
+
+init(autoreset=True)
 
 
 class Request:
@@ -20,11 +20,11 @@ class Request:
         :param arg2: Attribute of Database Class for use the connector mysql
         :param arg3: Attribute of Database Class for use the connector mysql
     """
-    
-    def __init__(self, *args, **kwargs):
-        Database.connect_user()
-        self.connection = Database.connection
-        self.cursor = Database.cursor
+
+    def __init__(self):
+        db.Database().connect_user()
+        self.connection = db.Database().connection
+        self.cursor = db.Database().cursor
 
 # ----------------------------------------------------------------------------
 # --------------------------------- USERS ------------------------------------
@@ -44,7 +44,8 @@ class Request:
             print(Fore.RED + "L'adresse email existe déjà.")
             print('----------------------------')
         else:
-            request_done = 'INSERT INTO User (username, email, pass) VALUES (%(username)s, %(email)s, %(password)s)'
+            request_done = 'INSERT INTO User (username, email, pass)\
+                        VALUES (%(username)s, %(email)s, %(password)s)'
             self.cursor.execute(request_done, response)
             self.connection.commit()
             print("---------------------------------------------")
@@ -64,8 +65,10 @@ class Request:
         result = self.cursor.fetchall()
         if len(result) == 0:
             print('--------------------------------------------------------------------------------')
+
             print(Fore.RED + 'Cette adresse email ou ce mot de passe ne correspondent pas, veuillez rééssayer.')
-            print('--------------------------------------------------------------------------------') 
+
+            print('--------------------------------------------------------------------------------')
         else:
             print("--------------------")
             print(Fore.GREEN + 'Vous êtes connectés.')
@@ -130,7 +133,7 @@ class Request:
         request = "SELECT product_name FROM Product WHERE product_name = %s"
         self.cursor.execute(request, (name,))
         result = self.cursor.fetchall()
-        
+
         return result
 
     def set_products(self, products):
@@ -138,7 +141,6 @@ class Request:
             Method for insert the products in database
             :param arg1: (tuple) with all product's informations get in API
         """
-        print(products)
         request = "INSERT INTO Product (\
             product_name, product_desc, product_store, product_url, product_nutriscore, nutriscore_grade \
             ) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -183,8 +185,8 @@ class Request:
             Called for display the products.
             :param arg1: (int) id's category get by the user's choice
         """
-        request = "SELECT id, product_name, product_desc, product_store, product_url, product_nutriscore, \
-                nutriscore_grade FROM Product \
+        request = "SELECT id, product_name, product_desc, product_store,\
+                product_url, product_nutriscore, nutriscore_grade FROM Product \
                 INNER JOIN Category_product ON Product.id = Category_product.id_product \
                 WHERE id_category = %s"
         self.cursor.execute(request, (choice,))
@@ -221,14 +223,14 @@ class Request:
             print(Fore.RED + 'Le produit a déjà été enregistré en base de données.')
             print('----------------------------------------------------')
         else:
-            request =  "INSERT INTO User_product (id_user, id_product) \
+            request = "INSERT INTO User_product (id_user, id_product) \
                         VALUES ( \
                             (SELECT id FROM User WHERE id = %s), \
                             (SELECT id FROM Product WHERE id = %s) \
                         )"
             self.cursor.execute(request, (const.USER, id_product))
             self.connection.commit()
-            View.save_product()
+            vw.View().save_product()
 
     def get_substitute_saved(self):
         """ Method to get the substitute saved in database """
@@ -245,5 +247,5 @@ class Request:
             :param arg1: (int) Get the user's id in constant declared when the user to login
         """
         request = "DELETE FROM User_product WHERE id_user = %s"
-        self.cursor.execute(request, (id_substitute,))
+        self.cursor.execute(request, (id_user,))
         self.connection.commit()
