@@ -10,3 +10,5 @@ ROOT = ''
 PASSWORD = ''
 
 USER = ''
+
+SUBSTITUTE_LIST = False

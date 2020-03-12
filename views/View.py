@@ -4,6 +4,8 @@
 """ The views module containing all views of program """
 
 from colorama import init, Fore
+from common   import constants  as const
+
 init(autoreset=True)
 
 
@@ -99,10 +101,14 @@ class View:
             print('+-------------------------------------------------------------------------------------------------+')
             print(' ')
 
+        print('Souhaitez-vous supprimer votre liste de substituts ?')
+        const.SUBSTITUTE_LIST = True
+
     @staticmethod
     def no_substitute_saved():
         """ Message for indicate to the user he don't have saved substitute """
         print(Fore.RED + "Vous n'avez pas de substituts d'enregistré.")
+        const.SUBSTITUTE_LIST = False
 
     @staticmethod
     def no_view_substitute():

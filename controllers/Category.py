@@ -42,35 +42,3 @@ class Category:
         # Add in database
         sql = req.Request()
         sql.set_categories(self.name)
-
-    @staticmethod
-    def delete():
-        """
-            Method for delete the categories in reference table
-            Category_product, Product and Category
-        """
-        Product = pro.Product()
-
-        sql = req.Request()
-        sql.delete_ref_categories_products()
-        Product.delete()
-        sql.delete_categories()
-
-    def update(self):
-        """
-            Method to update the datas in the database.
-            She delete the datas and get the new datas in API
-        """
-        sql = req.Request()
-        result = sql.get_categories()
-
-        if not result:
-            print('--------------------------------------------------------------------')
-            print(Fore.RED + 'Aucune catégorie présente en base, veuillez poursuivre le programme.')
-            print('--------------------------------------------------------------------')
-        else:
-            # Delete olds Categories in database
-            self.delete()
-
-            # Get new Categories in API
-            self.get()

@@ -87,7 +87,6 @@ class Product:
         """ Method to delete the products in the reference table Category_product and Product """
         sql = req.Request()
         sql.delete_ref_substitute(const.USER)
-        sql.delete_products()
 
     def display_information_product(self, choice_product, choice_category):
         """

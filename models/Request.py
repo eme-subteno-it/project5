@@ -98,21 +98,9 @@ class Request:
         self.cursor.execute(request_done, (response,))
         self.connection.commit()
 
-    def delete_categories(self):
-        """ Method for delete the categories in database """
-        request = "DELETE FROM Category"
-        self.cursor.execute(request)
-        self.connection.commit()
-
 # ----------------------------------------------------------------------------
 # ------------------------------ PRODUCTS ------------------------------------
 # ----------------------------------------------------------------------------
-
-    def delete_products(self):
-        """ Method for delete the products """
-        request = "DELETE FROM Product"
-        self.cursor.execute(request)
-        self.connection.commit()
 
     def get_products(self, choice_product):
         """
@@ -150,15 +138,6 @@ class Request:
 # ----------------------------------------------------------------------------
 # ------------------------ CATEGORY_PRODUCTS ---------------------------------
 # ----------------------------------------------------------------------------
-    def delete_ref_categories_products(self):
-        """
-            Method for delete the ids Category and products in reference table Category_product
-            Called after the insertion of categories and products in database
-        """
-        request = "DELETE FROM Category_product"
-        self.cursor.execute(request)
-        self.connection.commit()
-
 
     def set_products_categories(self, products_categories):
         """
@@ -224,10 +203,7 @@ class Request:
             print('----------------------------------------------------')
         else:
             request = "INSERT INTO User_product (id_user, id_product) \
-                        VALUES ( \
-                            (SELECT id FROM User WHERE id = %s), \
-                            (SELECT id FROM Product WHERE id = %s) \
-                        )"
+                        VALUES (%s, %s)"
             self.cursor.execute(request, (const.USER, id_product))
             self.connection.commit()
             vw.View().save_product()
