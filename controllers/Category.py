@@ -30,6 +30,10 @@ class Category:
         if len(result) == 0:
             res = api.APIrequest()
             res.get_datas()
+
+            cat = req.Request() # New instance
+            categories = cat.get_categories()
+            vw.View().view_categories(categories)
         else:
             vw.View().view_categories(result)
 

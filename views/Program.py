@@ -101,7 +101,9 @@ class Program:
                 choice_delete = int(input('Oui (1) ou non (2) : '))
                 if choice_delete == 1:
                     Product.delete()
-                    print('Liste supprimé !')
+                    print('----------------')
+                    print(Fore.GREEN + 'Liste supprimé !')
+                    print('----------------')
                     cls.choice_categories()
                 elif choice_delete == 2:
                     cls.choice_categories()
